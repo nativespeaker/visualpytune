@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from codeview import DemoCodeEditor as CodeEditor
+from codepanel_mixin import FindReplaceMixin
 
 import wx
 
-class CodePanel(wx.Panel):
+class CodePanel(wx.Panel, FindReplaceMixin):
 	def __init__(self, *a, **k):
 		in_tab = k.pop('in_tab', False)
 		super(CodePanel, self).__init__(*a, **k)
+		FindReplaceMixin.__init__(self)
 		
 		self.toolbar = self.CreatToolBar(in_tab)
 		
@@ -34,6 +36,9 @@ class CodePanel(wx.Panel):
 		self.open_wndnew_callback = None
 		
 		self.run_callback = None
+	
+	def GetEditor(self):
+		return self.editor
 		
 	def CreatToolBar(self, in_tab):
 		'''
@@ -173,6 +178,7 @@ class CodePanel(wx.Panel):
 			ID_FIND = wx.NewId()
 			ID_REPLACE = wx.NewId()
 			
+			# ----------- Operate Clipboard ----------------
 			def OnCopy(evt):
 				self.editor.Copy()
 			def OnCut(evt):
@@ -181,6 +187,7 @@ class CodePanel(wx.Panel):
 				if self.editor.CanPaste():
 					self.editor.Paste()
 					
+			# ------------ Undo & Redo ----------------
 			def OnUndo(evt):
 				if self.editor.CanUndo():
 					self.editor.Undo()
@@ -190,10 +197,11 @@ class CodePanel(wx.Panel):
 					
 			# ---------- Find & Replace ----------------
 			def OnFind(evt):
-				pass
+				self.ShowFindDlg()
 			def OnReplace(evt):
-				pass
+				self.ShowFindReplaceDlg()
 			
+			# ------------ Add Label -------------------
 			toolbar.AddLabelTool(ID_COPY, '', \
 				wx.Bitmap('../res/codectrl/edit-copy.png'), \
 				shortHelp = 'Copy selected text.')
