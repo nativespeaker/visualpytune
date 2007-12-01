@@ -47,9 +47,7 @@ class UIConfig(Singleton):
 	def __init__(self):
 		self.__init()
 		self.modified = False
-		
-		print 'UIConfig.__init__'
-		
+	
 	def __init(self):
 		self.file = self.opencfg('option/ui.cfg')
 		self.cfg = Parser()

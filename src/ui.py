@@ -142,10 +142,34 @@ def createMenu(frm):
 		
 		# insert about menu
 		def about(evt):
-			pass
+			def ShowAbout():
+				info = wx.AboutDialogInfo()
+				
+				lic = open('licence','rt')
+				info.SetLicence(''.join(lic.readlines()))
+				lic.close()
+				
+#				info.SetIcon(wx.Icon('res/toolbar/help-browser.png', wx.BITMAP_TYPE_PNG))
+				info.SetName('VisualPyTune')
+				info.SetVersion('0.1.0')
+				info.SetDescription( \
+					'VisualPyTune is a python program performance tuning tool, based on wxPython.\n'
+					+ 'It can show you a callgraph(doing), stats report, callees, callers, and caky charts.\n'
+					+ 'finaly, you can remove inessential information very easy. ')
+				info.SetCopyright('(C) 2007 Yonghao Lai')
+				info.SetWebSite('http://code.google.com/p/visualpytune')
+
+				info.AddDeveloper('Yonghao Lai')
+#				info.AddDocWriter('Yonghao Lai')
+#				info.AddArtist('Yonghao Lai')
+#				info.AddTranslator('Yonghao Lai')
+
+				wx.AboutBox(info)
+			ShowAbout()
 		ID_ABOUT = wx.NewId()
 		item_about = wx.MenuItem(menu, ID_ABOUT, '&About...')
 		menu.AppendItem(item_about)
+		frm.Bind(wx.EVT_MENU, about, id = ID_ABOUT)
 		
 		mb.Append(menu, '&Help')
 		
