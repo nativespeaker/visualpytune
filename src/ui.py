@@ -115,21 +115,36 @@ def createMenu(frm):
 		
 		mb.Append(menu, '&Tools')
 		
-	def createOptionMenu(mb):
-		menu = wx.Menu()
+		def timeit(evt):
+			print 'timeit'
 		
-		mb.Append(menu, '&Option')
+		ID_TIMEIT = wx.NewId()
+		item_timeit = wx.MenuItem(menu, ID_TIMEIT, '&Time It\tCtrl+T')
+		item_timeit.SetBitmap(wx.Bitmap('res/menu/utilities-system-monitor.png'))
+		menu.AppendItem(item_timeit)
+		frm.Bind(wx.EVT_MENU, timeit, id = ID_TIMEIT)
+		frm.toolbar.AddLabelTool(ID_TIMEIT, '', \
+			wx.Bitmap('res/toolbar/utilities-system-monitor.png'), \
+			shortHelp = 'Time it')
+		frm.toolbar.Realize()
+		
+#	def createOptionMenu(mb):
+#		menu = wx.Menu()
+#		
+#		mb.Append(menu, '&Option')
 		
 	def createHelpMenu(mb):
 		menu = wx.Menu()
 		
 		#insert help menu
 		def help(evt):
+			print 'help'
 			pass
 		ID_HELP = wx.NewId()
 		item_help = wx.MenuItem(menu, ID_HELP, '&Help\tCtrl+H')
 		item_help.SetBitmap(wx.Bitmap('res/menu/help-browser.png'))
 		menu.AppendItem(item_help)
+		frm.Bind(wx.EVT_MENU, help, id = ID_HELP)
 		# add toolbar button
 		frm.toolbar.AddLabelTool(ID_HELP, '', \
 			wx.Bitmap('res/toolbar/help-browser.png'), \
@@ -178,7 +193,7 @@ def createMenu(frm):
 	
 	createFileMenu(mb)
 	createToolsMenu(mb)
-	createOptionMenu(mb)
+#	createOptionMenu(mb)
 	createHelpMenu(mb)
 	
 def createMainUI(frm):
