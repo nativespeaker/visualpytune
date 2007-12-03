@@ -126,6 +126,7 @@ def createMenu(frm):
 		frm.toolbar.AddLabelTool(ID_TIMEIT, '', \
 			wx.Bitmap('res/toolbar/utilities-system-monitor.png'), \
 			shortHelp = 'Time it')
+		frm.toolbar.AddSeparator()
 		frm.toolbar.Realize()
 		
 #	def createOptionMenu(mb):
@@ -198,7 +199,7 @@ def createMenu(frm):
 	
 def createMainUI(frm):
 	from viewpanel import Panel as vp
-	from datapanel import Panel as dp
+	from statspanel import Panel as sp
 	from callerspanel import Panel as cp
 	from calleespanel import Panel as cep
 	from uicfg import UIConfig
@@ -209,24 +210,24 @@ def createMainUI(frm):
 	usplitter = wx.SplitterWindow(splitter, wx.ID_ANY, style = wx.BORDER_NONE)
 	splitter.SplitVertically(frm.viewpanel, usplitter, UIConfig.inst().getLeftSplitPos(frm))
 	
-	frm.datapanel = dp(usplitter)
+	frm.statspanel = sp(usplitter)
 	rsplitter = wx.SplitterWindow(usplitter, wx.ID_ANY, style = wx.BORDER_NONE)
-	usplitter.SplitHorizontally(frm.datapanel, rsplitter, UIConfig.inst().getUpSplitPos(frm))
+	usplitter.SplitHorizontally(frm.statspanel, rsplitter, UIConfig.inst().getUpSplitPos(frm))
 	
 	frm.callerspanel = cp(rsplitter)
 	frm.calleespanel = cep(rsplitter)
 	rsplitter.SplitVertically(frm.callerspanel, frm.calleespanel)
 	
-	def OnDataSelected(evt):
+	def OnStatsSelected(evt):
 		idx = evt.GetIndex()
-		evt_list = frm.datapanel.listctrl
+		evt_list = frm.statspanel.listctrl
 		idx = int(evt_list.GetItemText(idx))
 		fln = frm.model.get_fln_by_idx(idx)
 		caky_title = 'Callees of ' + fln
 		frm.calleespanel.update(caky_title, frm.model.get_callees(idx))
 		frm.callerspanel.update(caky_title, frm.model.get_callers(idx))
 		
-	frm.datapanel.listctrl.selected_callback = OnDataSelected
+	frm.statspanel.listctrl.selected_callback = OnStatsSelected
 	
 	def OnDirCtrlSelChanged(evt):
 		path = frm.viewpanel.dirctrl.GetFilePath()
@@ -282,15 +283,15 @@ def AddMiscFunc(frm):
 	def OpenFile(path):
 		assert path
 		print 'Opening %s'%path
-		from datamodel import DataModel
+		from statsmodel import StatsModel
 		try:
-			frm.model = DataModel(path)
+			frm.model = StatsModel(path)
 		except:
 			import sys
 			from traceback import print_exc
 			print_exc(file = sys.stdout)
 			return
-		frm.datapanel.listctrl.reset(frm.model.get_data())
+		frm.statspanel.listctrl.reset(frm.model.get_data())
 	frm.OpenFile = OpenFile
 	
 	def SaveStats(path):

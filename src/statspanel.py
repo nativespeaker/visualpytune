@@ -7,9 +7,9 @@ from callgraph import CallGraph
 from filterpanel import FilterPanel
 import panel
 	
-class DataPanel(wx.Panel):
+class StatsPanel(wx.Panel):
 	def __init__(self, *a, **k):
-		super(DataPanel, self).__init__(*a, **k)
+		super(StatsPanel, self).__init__(*a, **k)
 		
 		self.listctrl = DataList(self, wx.ID_ANY, \
 			style = wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.NO_BORDER)
@@ -31,13 +31,13 @@ class Panel(panel.NotebookPanel):
 	def __init__(self, *a, **k):
 		super(Panel, self).__init__(*a, **k)
 		
-		self.datapanel = DataPanel(self.notebook, wx.ID_ANY)
-		self.listctrl = self.datapanel.listctrl
+		self.statspanel = StatsPanel(self.notebook, wx.ID_ANY)
+		self.listctrl = self.statspanel.listctrl
 
 		self.chartctrl = CallGraph(self.notebook, wx.ID_ANY)
 		
 		self.BuildPages()
 		
 	def BuildPages(self):
-		self.notebook.AddPage(self.datapanel, 'Data')
+		self.notebook.AddPage(self.statspanel, 'Stats')
 		self.notebook.AddPage(self.chartctrl, 'Call Graph')
