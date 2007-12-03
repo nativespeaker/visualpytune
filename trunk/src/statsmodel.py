@@ -31,7 +31,7 @@ def make_chart_data(stats):
 		(fln_str_func2(fln), ct) for (i, fln, cnt, ct) in stats.itervalues() ]
 	return data
 
-class DataModel(object):
+class StatsModel(object):
 	def __init__(self, fn = None):
 		if fn:
 			self.reset_stats(fn)
