@@ -77,16 +77,26 @@ class TimeitDlg(wx.Dialog):
 						break
 					s += c
 				print s
+				s = ''
+				stream = inst.GetInputStream()
+				while True:
+					c = stream.GetC()
+					if 0 == stream.LastRead():
+						break
+					s += c
+				print s
 				
 					
 		stmt = self.stmt.GetText()
 		setup = self.setup.GetText()
-		cmd = 'python timeit.py -n %s -r %s '%( \
+		import timeit
+		cmd = 'python %s -n %s -r %s '%( \
+			timeit.__file__, \
 			self.number.GetValue(), \
 			self.repeat.GetValue())
 		if setup:
-			cmd += '-s ' + repr(setup.encode('asscii')) + ' '
-		cmd += repr(stmt.encode('ascii'))
+			cmd += '-s ' + '"%s"'%setup + ' '
+		cmd += '"%s"'%stmt
 		print cmd
 		proc = TimeitProc(self)
 		proc.Redirect()
