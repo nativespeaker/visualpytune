@@ -116,7 +116,8 @@ def createMenu(frm):
 		mb.Append(menu, '&Tools')
 		
 		def timeit(evt):
-			print 'timeit'
+			from timeitdlg import ShowTimeitDlg
+			ShowTimeitDlg(frm)
 		
 		ID_TIMEIT = wx.NewId()
 		item_timeit = wx.MenuItem(menu, ID_TIMEIT, '&Time It\tCtrl+T')
