@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*- 
 
 import wx
-
+from wx.lib.intctrl import IntCtrl
 from codectrl.codeview import DemoCodeEditor as CodeEditor
 
 dlgsize = (640, 480)
@@ -54,6 +54,7 @@ class TimeitDlg(wx.Dialog):
 		# --------------- arguments ------------------------------------
 		hbox = wx.BoxSizer(wx.HORIZONTAL)
 		self.argsbtn = wx.Button(self, wx.ID_ANY, 'Arguments >>')
+		self.argsbtn.closed = False
 		hbox.Add(self.argsbtn, \
 			border = 10, \
 			flag = wx.LEFT | wx.ALIGN_LEFT)
@@ -63,19 +64,22 @@ class TimeitDlg(wx.Dialog):
 			flag = wx.RIGHT | wx.ALIGN_CENTRE_VERTICAL)
 		vbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
 		
+		self.argsbox = wx.BoxSizer(wx.VERTICAL)
 		hbox = wx.BoxSizer(wx.HORIZONTAL)
 		hbox.Add(wx.StaticText(self, wx.ID_ANY, 'Number: '), \
 			flag = wx.ALIGN_LEFT)
-		self.number = wx.TextCtrl(self, wx.ID_ANY)
+		self.number = IntCtrl(self)
 		hbox.Add(self.number, flag = wx.ALIGN_RIGHT | wx.EXPAND)
-		vbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
+		self.argsbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
 		
 		hbox = wx.BoxSizer(wx.HORIZONTAL)
 		hbox.Add(wx.StaticText(self, wx.ID_ANY, 'Repeat: '), \
 			flag = wx.ALIGN_LEFT)
-		self.repeat = wx.TextCtrl(self, wx.ID_ANY)
+		self.repeat = IntCtrl(self)
 		hbox.Add(self.repeat, flag = wx.ALIGN_RIGHT | wx.EXPAND)
-		vbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
+		self.argsbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
+		
+		vbox.Add(self.argsbox, flag = wx.EXPAND)
 		
 		# ---------------- error and output ----------------------------
 		hbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -114,12 +118,20 @@ class TimeitDlg(wx.Dialog):
 		self.ok.Bind(wx.EVT_BUTTON, self.OnOk)
 		
 		self.Reset()
+		self.OnArgsbtn(None)
 #		self.OnStmtbtn(None)
 		self.OnSetupbtn(None)
 		self.OnResultbtn(None)
 		
 	def OnArgsbtn(self, evt):
-		pass
+		if self.argsbtn.closed:
+			self.GetSizer().Show(self.argsbox, True, True)
+			self.argsbtn.SetLabel('Arguments <<')
+		else:
+			self.GetSizer().Show(self.argsbox, False, True)
+			self.argsbtn.SetLabel('Arguments >>')
+		self.Fit()
+		self.argsbtn.closed ^= True
 		
 	def OnStmtbtn(self, evt):
 		self.DoClose(self.stmtbtn, self.stmt, \
@@ -179,8 +191,8 @@ class TimeitDlg(wx.Dialog):
 	def Reset(self):
 		self.stmt.SetValue('')
 		self.setup.SetValue('')
-		self.number.SetValue('1000000')
-		self.repeat.SetValue('3')
+		self.number.SetValue(1000000)
+		self.repeat.SetValue(3)
 		
 	def Fit(self):
 		if not self.IsShown():
