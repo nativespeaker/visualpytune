@@ -1,26 +1,27 @@
+#labels Featured
 = VisualPyTune 0.1.0 版发布！ =
 
 == 缘起：==
-    Python 程序的确更容易遭遇性能瓶颈，尽管其内置了性能剖分模块（如 Profile、hotshot 等），但对于剖分结果却没有一个良好的图形界面浏览器，使用 pstats模块获取的纯文本的报表阅读非常困难。VisualPyTune 正是为解决这个问题而生。它提供了友好的 GUI 界面（使用 wxPython 开发），能够方便地进行排序、过滤、查看调用函数、查看被调用函数、以及饼图形式的被调用函数视图。能够方便地进行性能调优。
+ Python 程序的确更容易遭遇性能瓶颈，尽管其内置了性能剖分模块（如 Profile、hotshot 等），但对于剖分结果却没有一个良好的图形界面浏览器，使用 pstats模块获取的纯文本的报表阅读非常困难。VisualPyTune 正是为解决这个问题而生。它提供了友好的 GUI 界面（使用 wxPython 开发），能够方便地进行排序、过滤、查看调用函数、查看被调用函数、以及饼图形式的被调用函数视图。能够方便地进行性能调优。
 
 == 预览：==
-http://visualpytune.googlecode.com/files/vpt.PNG
+ http://visualpytune.googlecode.com/files/vpt.PNG
 
 == 安装：==
-Windows 用户请从下面的地址下载压缩包（5.3 MB），解压即可以使用：
-http://visualpytune.googlecode.com/files/visualpytune-0.1.0-win32.zip
-Linux 用户请直接从 svn checkout：
-svn checkout http://visualpytune.googlecode.com/svn/trunk/ visualpytune-read-only
+ * Windows 用户请从下面的地址下载压缩包（5.3 MB），解压即可以使用：
+ http://visualpytune.googlecode.com/files/visualpytune-0.1.0-win32.zip
+ * Linux 用户请直接从 svn checkout： 
+ svn checkout http://visualpytune.googlecode.com/svn/trunk/ visualpytune-read-only
 
 == Bug反馈：==
-请到下面的地址填写表单（点击左上角的 New Issue）
-http://code.google.com/p/visualpytune/issues/list
+ 请到下面的地址填写表单（点击左上角的 New Issue）
+ http://code.google.com/p/visualpytune/issues/list
 
 == 项目主页：==
-http://code.google.com/p/visualpytune
+ http://code.google.com/p/visualpytune
 
 == 后续开发内容：==
-# 开发 CallGraph，参考http://pycallgraph.slowchop.com/
-# 完善文档
+ # 开发 CallGraph，参考http://pycallgraph.slowchop.com/
+ # 完善文档
 
-欢迎英文强劲的朋友们参与本项目。
+ 欢迎朋友们参与本项目。
