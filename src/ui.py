@@ -206,15 +206,21 @@ def createMainUI(frm):
 	from calleespanel import Panel as cep
 	from uicfg import UIConfig
 	
-	splitter = wx.SplitterWindow(frm, wx.ID_ANY)
+	from proportionalsplitter import ProportionalSplitter
+	splitter = ProportionalSplitter(frm, wx.ID_ANY, \
+		proportion = UIConfig.inst().getLeftSplitProp(),)
 	
 	frm.viewpanel = vp(splitter)
-	usplitter = wx.SplitterWindow(splitter, wx.ID_ANY, style = wx.BORDER_NONE)
-	splitter.SplitVertically(frm.viewpanel, usplitter, UIConfig.inst().getLeftSplitPos(frm))
-	
+	usplitter = ProportionalSplitter(splitter, wx.ID_ANY, \
+		proportion = UIConfig.inst().getUpSplitProp(), \
+		style = wx.BORDER_NONE)
+	splitter.SplitVertically(frm.viewpanel, usplitter)
+		
 	frm.statspanel = sp(usplitter)
-	rsplitter = wx.SplitterWindow(usplitter, wx.ID_ANY, style = wx.BORDER_NONE)
-	usplitter.SplitHorizontally(frm.statspanel, rsplitter, UIConfig.inst().getUpSplitPos(frm))
+	rsplitter = ProportionalSplitter(usplitter, wx.ID_ANY, \
+		proportion = UIConfig.inst().getRightSplitProp(), \
+		style = wx.BORDER_NONE)
+	usplitter.SplitHorizontally(frm.statspanel, rsplitter)
 	
 	frm.callerspanel = cp(rsplitter)
 	frm.calleespanel = cep(rsplitter)
@@ -241,23 +247,8 @@ def createMainUI(frm):
 	def OnSize(evt):
 		size = evt.GetSize()
 		UIConfig.inst().setWindowSize((size.x, size.y))
-		
-		splitter.SetSashPosition(UIConfig.inst().getLeftSplitPos(frm))
-		usplitter.SetSashPosition(UIConfig.inst().getUpSplitPos(frm))
-		rsplitter.SetSashPosition(UIConfig.inst().getRightSplitPos(frm))
 		evt.Skip()
 	frm.Bind(wx.EVT_SIZE, OnSize, frm)
-		
-	def onSashPosChanged(evt):
-		evtobj = evt.GetEventObject()
-		pos = evt.GetSashPosition()
-		if evtobj == splitter:
-			UIConfig.inst().setLeftSplitPos(frm, pos)
-		elif evtobj == usplitter:
-			UIConfig.inst().setUpSplitPos(frm, pos)
-		elif evtobj == rsplitter:
-			UIConfig.inst().setRightSplitPos(frm, pos)
-	frm.Bind(wx.EVT_SPLITTER_SASH_POS_CHANGED, onSashPosChanged)
 		
 	def OnClose(evt):
 		UIConfig.inst().setLastDir( \
@@ -265,6 +256,9 @@ def createMainUI(frm):
 		UIConfig.inst().setMaximized( \
 			frm.IsMaximized())
 		UIConfig.inst().setWindowPos(frm.GetPositionTuple())
+		UIConfig.inst().setLeftSplitProp(splitter.proportion)
+		UIConfig.inst().setUpSplitProp(usplitter.proportion)
+		UIConfig.inst().setRightSplitProp(rsplitter.proportion)
 		UIConfig.inst().release()
 		frm.Destroy()
 	frm.Bind(wx.EVT_CLOSE, OnClose, frm)
@@ -318,11 +312,15 @@ def createUI(*a, **k):
 		
 	obj = wx.Frame(*a, **k)
 	
+	obj.SetIcon(wx.Icon('res/py.ico', wx.BITMAP_TYPE_ICO))
 	createToolbar(obj)
 	createMenu(obj)
 	createStatusbar(obj)
 	createMainUI(obj)
 	AddMiscFunc(obj)
+	
+	if UIConfig.inst().getMaximized():
+		wx.CallAfter(obj.Maximize)
 	
 	return obj
 	

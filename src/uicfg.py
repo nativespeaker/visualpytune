@@ -13,7 +13,7 @@ pos=200,200
 [split]
 left_split=0.3
 up_split=0.67
-right_split=-0.35
+right_split=0.5
 [dirctrl]
 dir=
 """
@@ -100,38 +100,26 @@ class UIConfig(Singleton):
 		self.cfg.set(WINDOW, POS, \
 			sep.join(map(str, value)))
 		
-	def getLeftSplitPos(self, wnd):
-		w, h = wnd.GetClientSizeTuple()
-		return int( w * \
-			self.cfg.getfloat(SPLIT, LEFT_SPLIT))
+	def getLeftSplitProp(self):
+		return self.cfg.getfloat(SPLIT, LEFT_SPLIT)
 			
 	@modified_decorator
-	def setLeftSplitPos(self, wnd, sash_pos):
-		w, h = wnd.GetClientSizeTuple()
-		self.cfg.set(SPLIT, LEFT_SPLIT, \
-			'%.2f'%(sash_pos / float(w), ))
+	def setLeftSplitProp(self, prop):
+		self.cfg.set(SPLIT, LEFT_SPLIT, '%.2f'%prop)
 			
-	def getUpSplitPos(self, wnd):
-		w, h = wnd.GetClientSizeTuple()
-		return int( h * \
-			self.cfg.getfloat(SPLIT, UP_SPLIT))
+	def getUpSplitProp(self):
+		return self.cfg.getfloat(SPLIT, UP_SPLIT)
 			
 	@modified_decorator
-	def setUpSplitPos(self, wnd, sash_pos):
-		w, h = wnd.GetClientSizeTuple()
-		self.cfg.set(SPLIT, UP_SPLIT, \
-			'%.2f'%(sash_pos / float(h)))
+	def setUpSplitProp(self, prop):
+		self.cfg.set(SPLIT, UP_SPLIT, '%.2f'%prop)
 			
-	def getRightSplitPos(self, wnd):
-		w, h = wnd.GetClientSizeTuple()
-		return int( w * \
-			self.cfg.getfloat(SPLIT, RIGHT_SPLIT))
+	def getRightSplitProp(self):
+		return self.cfg.getfloat(SPLIT, RIGHT_SPLIT)
 			
 	@modified_decorator
-	def setRightSplitPos(self, wnd, sash_pos):
-		w, h = wnd.GetClientSizeTuple()
-		self.cfg.set(SPLIT, RIGHT_SPLIT, \
-			'%.2f'%(float(sash_pos) / w))
+	def setRightSplitProp(self, prop):
+		self.cfg.set(SPLIT, RIGHT_SPLIT, '%.2f'%prop)
 			
 	def getLastDir(self):
 		return self.cfg.get(DIRCTRL, DIR)
