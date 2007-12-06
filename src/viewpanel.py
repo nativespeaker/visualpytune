@@ -22,7 +22,7 @@ def Panel(parent, *a, **k):
 	box = wx.BoxSizer(wx.VERTICAL)
 	obj.SetSizer(box)
 	
-	obj.notebook = Notebook(obj, wx.ID_ANY, style = wx.BK_DEFAULT | wx.BORDER_NONE)
+	obj.notebook = Notebook(obj, wx.ID_ANY, style = wx.BORDER_NONE)
 	
 	box.Add(obj.notebook, 1, wx.EXPAND | wx.ALL)
 		

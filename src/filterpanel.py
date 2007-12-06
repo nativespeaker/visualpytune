@@ -15,6 +15,7 @@ class FilterPanel(wx.Panel):
 		self.func_filter = wx.TextCtrl(self, wx.ID_ANY)
 		rbox.Add(self.func_filter, \
 			border = 10, \
+			proportion = 1, \
 			flag = wx.TOP | wx.LEFT | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
 		
 		rbox.Add(wx.StaticText(self, wx.ID_ANY, 'File Filter:'), \
@@ -24,6 +25,7 @@ class FilterPanel(wx.Panel):
 		self.file_filter = wx.TextCtrl(self, wx.ID_ANY)
 		rbox.Add(self.file_filter, \
 			border = 10, \
+			proportion = 1, \
 			flag = wx.TOP | wx.LEFT | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
 		
 		ID_OK = wx.NewId()
@@ -50,7 +52,7 @@ class FilterPanel(wx.Panel):
 			
 		hbox = wx.BoxSizer(wx.HORIZONTAL)
 		hbox.Add(lbox, flag = wx.EXPAND | wx.ALIGN_LEFT)
-		hbox.Add(rbox, flag = wx.EXPAND | wx.ALIGN_RIGHT)
+		hbox.Add(rbox, proportion = 1, flag = wx.EXPAND | wx.ALIGN_RIGHT)
 			
 		vbox = wx.BoxSizer(wx.VERTICAL)
 		vbox.Add(hbox)
