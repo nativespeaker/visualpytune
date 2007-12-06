@@ -13,5 +13,5 @@ setup(windows=["vpt.py"], \
 	data_files = [('option', ['option/ui.cfg']), \
 		('res/codectrl', glob('res/codectrl/*.png')), \
 		('res/menu', glob('res/menu/*.png')), \
-		('res/menu', glob('res/toolbar/*.png'))]
+		('res/toolbar', glob('res/toolbar/*.png'))]
 	)
