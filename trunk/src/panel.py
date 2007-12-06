@@ -7,7 +7,7 @@ class NotebookPanel(wx.Panel):
 		super(NotebookPanel, self).__init__(*a, **k)
 		
 		self.notebook = wx.Notebook(self, wx.ID_ANY, \
-				style = wx.BK_DEFAULT | wx.BORDER_NONE)
+				style = wx.BORDER_NONE)
 		
 		box = wx.BoxSizer(wx.VERTICAL)
 		self.SetSizer(box)
