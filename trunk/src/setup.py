@@ -11,6 +11,7 @@ setup(windows=["vpt.py", {'script':'vpt.py','icon_resources':[(1, 'res/py.ico')]
 	name = name, \
 	version = ver, \
 	data_files = [('option', ['option/ui.cfg']), \
+		('', ['licence']), \
 		('res', ['res/py.ico']), \
 		('res/codectrl', glob('res/codectrl/*.png')), \
 		('res/menu', glob('res/menu/*.png')), \
