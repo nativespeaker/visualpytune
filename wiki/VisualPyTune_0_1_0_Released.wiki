@@ -2,7 +2,7 @@
 = 可视化的 Python 性能调优工具 VisualPyTune (0.1.0 版) 发布 =
 
 == 缘起：==
- Python 程序的确更容易遭遇性能瓶颈，尽管其内置了性能剖分模块（如 Profile、hotshot 等），但对于剖分结果却没有一个良好的图形界面浏览器，使用 pstats模块获取的纯文本的报表阅读非常困难。VisualPyTune 正是为解决这个问题而生。它提供了友好的 GUI 界面（使用 wxPython 开发），能够方便地进行排序、过滤、查看调用函数、查看被调用函数、以及饼图形式的被调用函数视图。能够方便地进行性能调优。
+ [http://www.python.org Python] 程序的确更容易遭遇性能瓶颈，尽管其内置了性能剖分模块（如 Profile、hotshot 等），但对于剖分结果却没有一个良好的图形界面浏览器，使用 pstats模块获取的纯文本的报表阅读非常困难。VisualPyTune 正是为解决这个问题而生。它提供了友好的 GUI 界面（使用 [http://www.wxpython.org wxPython] 开发），能够方便地进行排序、过滤、查看调用函数、查看被调用函数、以及饼图形式的被调用函数视图。能够方便地进行性能调优。
 
 == 项目主页：==
  http://code.google.com/p/visualpytune
@@ -15,6 +15,9 @@
  http://visualpytune.googlecode.com/files/visualpytune-0.1.0-win32.zip
  * Linux 用户请直接从 svn checkout： 
  svn checkout http://visualpytune.googlecode.com/svn/trunk/ visualpytune-read-only
+
+ 要在 Linux 平台下运行 VPT，您还需要安装 [http://www.wxpython.org wxPython]，请参考：
+ http://www.wxpython.org/download.php#binaries 
 
 == Bug反馈：==
  请到下面的地址填写表单（点击左上角的 New Issue）
