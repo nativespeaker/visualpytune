@@ -39,7 +39,7 @@ class FilterPanel(wx.Panel):
 		self.ResetButton = wx.Button(self, ID_RESET, '&Reset')
 		rbox.Add(self.ResetButton, \
 			border = 10, \
-			flag = wx.TOP | wx.RIGHT | wx.LEFT | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+			flag = wx.TOP | wx.LEFT | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
 		self.Bind(wx.EVT_BUTTON, self.OnReset, id = ID_RESET)
 			
 		lbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -55,7 +55,10 @@ class FilterPanel(wx.Panel):
 		hbox.Add(rbox, proportion = 1, flag = wx.EXPAND | wx.ALIGN_RIGHT)
 			
 		vbox = wx.BoxSizer(wx.VERTICAL)
-		vbox.Add(hbox)
+		vbox.Add(hbox, \
+			border = 10, \
+			proportion = 1, \
+			flag = wx.RIGHT | wx.EXPAND)
 		vbox.Add(wx.StaticLine(self), \
 			border = 10, \
 			flag = wx.TOP | wx.BOTTOM | wx.EXPAND)
