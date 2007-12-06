@@ -176,7 +176,7 @@ def createMenu(frm):
 				info.SetCopyright('(C) 2007 Yonghao Lai')
 				info.SetWebSite('http://code.google.com/p/visualpytune')
 
-				info.AddDeveloper('Yonghao Lai')
+				info.AddDeveloper('YonghaoLai(lanpahday@gmail.com)')
 #				info.AddDocWriter('Yonghao Lai')
 #				info.AddArtist('Yonghao Lai')
 #				info.AddTranslator('Yonghao Lai')
