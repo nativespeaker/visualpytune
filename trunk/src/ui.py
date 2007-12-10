@@ -278,7 +278,6 @@ def AddMiscFunc(frm):
 	
 	def OpenFile(path):
 		assert path
-		print 'Opening %s'%path
 		from statsmodel import StatsModel
 		try:
 			frm.model = StatsModel(path)
@@ -312,7 +311,7 @@ def createUI(*a, **k):
 		
 	obj = wx.Frame(*a, **k)
 	
-	obj.SetIcon(wx.Icon('res/py.ico', wx.BITMAP_TYPE_ICO))
+	obj.SetIcon(wx.Icon('res/Py.ico', wx.BITMAP_TYPE_ICO))
 	createToolbar(obj)
 	createMenu(obj)
 	createStatusbar(obj)
