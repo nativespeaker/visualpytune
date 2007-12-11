@@ -160,24 +160,24 @@ def createMenu(frm):
 		# insert about menu
 		def about(evt):
 			def ShowAbout():
-				from about import name, ver
+				from about import name, ver, url, author
 				info = wx.AboutDialogInfo()
 				
 				lic = open('licence','rt')
 				info.SetLicence(''.join(lic.readlines()))
 				lic.close()
 				
-#				info.SetIcon(wx.Icon('res/toolbar/help-browser.png', wx.BITMAP_TYPE_PNG))
+				info.SetIcon(wx.Icon('res/Py.ico', wx.BITMAP_TYPE_ICO))
 				info.SetName(name)
 				info.SetVersion(ver)
 				info.SetDescription( \
 					'VisualPyTune is a python program performance tuning tool, based on wxPython.\n'
 					+ 'It can show you a callgraph(doing), stats report, callees, callers, and caky charts.\n'
 					+ 'finaly, you can remove inessential information very easy. ')
-#				info.SetCopyright('(C) 2007 Yonghao Lai')
-				info.SetWebSite('http://code.google.com/p/visualpytune')
+				info.SetCopyright('(C) 2007 Yonghao Lai')
+				info.SetWebSite(url)
 
-				info.AddDeveloper('YonghaoLai(lanpahday@gmail.com)')
+				info.AddDeveloper(author)
 #				info.AddDocWriter('Yonghao Lai')
 #				info.AddArtist('Yonghao Lai')
 #				info.AddTranslator('Yonghao Lai')
