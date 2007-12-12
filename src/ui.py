@@ -100,7 +100,7 @@ def createMenu(frm):
 		
 		# insert Quit menu
 		def quit(event):
-			frm.Destroy()
+			frm.Close()
 		
 		ID_QUIT = wx.NewId()
 		item_quit = wx.MenuItem(menu, ID_QUIT, '&Quit\tCtrl+Q', 'Quit Application!')
@@ -260,7 +260,8 @@ def createMainUI(frm):
 		UIConfig.inst().setUpSplitProp(usplitter.proportion)
 		UIConfig.inst().setRightSplitProp(rsplitter.proportion)
 		UIConfig.inst().release()
-		frm.Destroy()
+#		frm.Destroy()
+		evt.Skip()
 	frm.Bind(wx.EVT_CLOSE, OnClose, frm)
 		
 def AddMiscFunc(frm):
