@@ -1,2 +1,2 @@
-python -OO setup.py py2exe
+python -OO pack_py2exe.py py2exe
 pause
