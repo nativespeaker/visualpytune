@@ -175,9 +175,10 @@ class TimeitDlg(wx.Dialog):
 					
 		stmt = self.stmt.GetText()
 		setup = self.setup.GetText()
-		import timeit
+#		import timeit
 		cmd = 'python %s -n %s -r %s '%( \
-			timeit.__file__, \
+#			timeit.__file__, \
+			'timeit.py', \
 			self.number.GetValue(), \
 			self.repeat.GetValue())
 		if setup:
@@ -187,6 +188,26 @@ class TimeitDlg(wx.Dialog):
 		proc = TimeitProc(self)
 		proc.Redirect()
 		wx.Execute(cmd, process = proc)
+		
+#		stmt = self.stmt.GetText()
+#		setup = self.setup.GetText()
+#		import subprocess, os
+#		cmd = 'python timeit.py -n %s -r %s '%( \
+#			self.number.GetValue(), \
+#			self.repeat.GetValue())
+#		if setup:
+#			cmd += '-s ' + '"%s"'%setup + ' '
+#		cmd += '"%s"'%stmt
+#		print cmd
+#		p = subprocess.Popen(cmd, shell = True, stderr = subprocess.PIPE, stdout = subprocess.PIPE)
+#		p.wait()
+#		self.result.SetValue( \
+#			'============ Error ============\n' \
+#			+ p.stderr.read() \
+#			+ '============== Output ==========\n' \
+#			+ p.stdout.read() )
+#		if self.resultbtn.closed:
+#			self.OnResultbtn(None)
 		
 	def Reset(self):
 		self.stmt.SetValue('')
