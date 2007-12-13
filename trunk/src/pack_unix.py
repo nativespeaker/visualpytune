@@ -14,7 +14,7 @@ setup(name= name,
 	  data_files = [ \
 		('option', ['dist/option/ui.cfg']), \
 		('', glob('dist/*.exe') + glob('dist/*.dll') + glob('dist/*.pyd') + glob('dist/*.zip')), \
-		('', ['dist/licence', 'dist/timeit.py']), \
+		('', ['dist/licence']), \
 		('res', ['dist/res/Py.ico']), \
 		('res/codectrl', glob('dist/res/codectrl/*.png')), \
 		('res/menu', glob('dist/res/menu/*.png')), \

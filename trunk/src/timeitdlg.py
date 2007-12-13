@@ -6,6 +6,27 @@ from codectrl.codeview import DemoCodeEditor as CodeEditor
 
 dlgsize = (640, 480)
 
+class PathOptoin(object):
+	def __init__(self):
+		try:
+			fd = open('option/path.cfg','r')
+		except IOError:
+			self.path = ''
+			return
+		self.path = fd.read()
+		fd.close()
+		
+	def GetPath(self):
+		return self.path
+		
+	def SetPath(self, path):
+		if path == self.path:
+			return
+		self.path = path
+		fd = open('option/path.cfg','w')
+		fd.write(path)
+		fd.close()
+
 class TimeitDlg(wx.Dialog):
 	def __init__(self, *a, **k):
 		super(TimeitDlg, self).__init__(size = dlgsize, *a, **k)
@@ -81,6 +102,31 @@ class TimeitDlg(wx.Dialog):
 		
 		vbox.Add(self.argsbox, flag = wx.EXPAND)
 		
+		# --------------- Python Path ------------------------------------
+		hbox = wx.BoxSizer(wx.HORIZONTAL)
+		self.pathbtn = wx.Button(self, wx.ID_ANY, 'Path >>')
+		self.pathbtn.closed = False
+		hbox.Add(self.pathbtn, \
+			border = 10, \
+			flag = wx.LEFT | wx.ALIGN_LEFT)
+		hbox.Add(wx.StaticLine(self), \
+			border = 10, \
+			proportion = 1, \
+			flag = wx.RIGHT | wx.ALIGN_CENTRE_VERTICAL)
+		vbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
+		
+		self.pathbox = wx.BoxSizer(wx.VERTICAL)
+		hbox = wx.BoxSizer(wx.HORIZONTAL)
+		hbox.Add(wx.StaticText(self, wx.ID_ANY, 'Python Path: '), \
+			flag = wx.ALIGN_LEFT)
+		self.path = wx.TextCtrl(self)
+		hbox.Add(self.path, proportion = 1, flag = wx.ALIGN_RIGHT | wx.EXPAND)
+		self.dirbtn = wx.Button(self, wx.ID_ANY, '...')
+		hbox.Add(self.dirbtn, border = 10, flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
+		self.pathbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
+		
+		vbox.Add(self.pathbox, flag = wx.EXPAND)
+		
 		# ---------------- error and output ----------------------------
 		hbox = wx.BoxSizer(wx.HORIZONTAL)
 		self.resultbtn = wx.Button(self, wx.ID_ANY, 'Result >>')
@@ -112,16 +158,33 @@ class TimeitDlg(wx.Dialog):
 		self.stmtbtn.Bind(wx.EVT_BUTTON, self.OnStmtbtn)
 		self.setupbtn.Bind(wx.EVT_BUTTON, self.OnSetupbtn)
 		self.argsbtn.Bind(wx.EVT_BUTTON, self.OnArgsbtn)
+		self.pathbtn.Bind(wx.EVT_BUTTON, self.OnPathbtn)
 		self.resultbtn.Bind(wx.EVT_BUTTON, self.OnResultbtn)
 		
+		self.dirbtn.Bind(wx.EVT_BUTTON, self.OnDirbtn)
 		self.clean.Bind(wx.EVT_BUTTON, self.OnClean)
 		self.ok.Bind(wx.EVT_BUTTON, self.OnOk)
+		
+		self.Bind(wx.EVT_CLOSE, self.OnClose)
 		
 		self.Reset()
 		self.OnArgsbtn(None)
 #		self.OnStmtbtn(None)
 		self.OnSetupbtn(None)
 		self.OnResultbtn(None)
+		
+		self.pathoption = PathOptoin()
+		self.path.SetValue(self.pathoption.GetPath())
+		
+	def OnPathbtn(self, evt):
+		if self.pathbtn.closed:
+			self.GetSizer().Show(self.pathbox, True, True)
+			self.pathbtn.SetLabel('Path <<')
+		else:
+			self.GetSizer().Show(self.pathbox, False, True)
+			self.pathbtn.SetLabel('Path >>')
+		self.Fit()
+		self.pathbtn.closed ^= True
 		
 	def OnArgsbtn(self, evt):
 		if self.argsbtn.closed:
@@ -151,63 +214,51 @@ class TimeitDlg(wx.Dialog):
 		self.Fit()
 		btn.closed ^= True
 		
+	def OnDirbtn(self, evt):
+		dlg = wx.DirDialog(self, "Choose python directory:",
+						  style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
+		if dlg.ShowModal() == wx.ID_OK:
+			self.path.SetValue(dlg.GetPath())
+		dlg.Destroy()
+		
 	def OnClean(self, evt):
 		self.Reset()
 		
 	def OnOk(self, evt):
-		class TimeitProc(wx.Process):
-			def OnTerminate(inst, pid, status):
-				def getstr(stream):
-					s = ''
-					while True:
-						c = stream.GetC()
-						if 0 == stream.LastRead():
-							break
-						s += c
-					return s
-				self.result.SetValue( \
-					'============ Error ============\n' \
-					+ getstr(inst.GetErrorStream()) \
-					+ '\n============ Output ============\n' \
-					+ getstr(inst.GetInputStream()))
-				if self.resultbtn.closed:
-					self.OnResultbtn(None)
-					
+		import os
+		path = self.path.GetValue()
+		if path == '' or not os.path.isdir(path):
+			wx.MessageDialog(self, \
+				message = 'Set python path first, please.', \
+				caption = 'Timeit', \
+				style = wx.OK | wx.ICON_EXCLAMATION).ShowModal()
+			return
 		stmt = self.stmt.GetText()
 		setup = self.setup.GetText()
-#		import timeit
-		cmd = 'python %s -n %s -r %s '%( \
-#			timeit.__file__, \
-			'timeit.py', \
+		import subprocess, os
+		cmd = 'python ./lib/timeit.py -n %s -r %s '%( \
 			self.number.GetValue(), \
 			self.repeat.GetValue())
 		if setup:
 			cmd += '-s ' + '"%s"'%setup + ' '
 		cmd += '"%s"'%stmt
 		print cmd
-		proc = TimeitProc(self)
-		proc.Redirect()
-		wx.Execute(cmd, process = proc)
+		p = subprocess.Popen(cmd, shell = True, \
+				cwd = self.path.GetValue(), \
+				stderr = subprocess.PIPE, \
+				stdout = subprocess.PIPE)
+		p.wait()
+		self.result.SetValue( \
+			'============ Error ============\n' \
+			+ p.stderr.read() \
+			+ '============== Output ==========\n' \
+			+ p.stdout.read() )
+		if self.resultbtn.closed:
+			self.OnResultbtn(None)
 		
-#		stmt = self.stmt.GetText()
-#		setup = self.setup.GetText()
-#		import subprocess, os
-#		cmd = 'python timeit.py -n %s -r %s '%( \
-#			self.number.GetValue(), \
-#			self.repeat.GetValue())
-#		if setup:
-#			cmd += '-s ' + '"%s"'%setup + ' '
-#		cmd += '"%s"'%stmt
-#		print cmd
-#		p = subprocess.Popen(cmd, shell = True, stderr = subprocess.PIPE, stdout = subprocess.PIPE)
-#		p.wait()
-#		self.result.SetValue( \
-#			'============ Error ============\n' \
-#			+ p.stderr.read() \
-#			+ '============== Output ==========\n' \
-#			+ p.stdout.read() )
-#		if self.resultbtn.closed:
-#			self.OnResultbtn(None)
+	def OnClose(self, evt):
+		self.pathoption.SetPath(self.path.GetValue())
+		evt.Skip()
 		
 	def Reset(self):
 		self.stmt.SetValue('')
