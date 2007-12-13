@@ -45,8 +45,9 @@ def str2list(s):
 
 class UIConfig(Singleton):
 	import util
-#	cfg = util.GenCfgPath('option', 'ui.cfg')
-	cfg = 'option/ui.cfg'
+	cfg = util.GenCfgPath('option', 'ui.cfg')
+	print cfg
+#	cfg = 'option/ui.cfg'
 	def __init__(self):
 		self.__init()
 		self.modified = False
@@ -130,13 +131,6 @@ class UIConfig(Singleton):
 	@modified_decorator
 	def setLastDir(self, value):
 		self.cfg.set(DIRCTRL, DIR, value)
-#		
-#	def getLastFile(self):
-#		return self.cfg.get(DIRCTRL, FILE)
-#		
-#	@modified_decorator
-#	def setLastFile(self, value):
-#		self.cfg.set(DIRCTRL, FILE, value)
 		
 inst = UIConfig()
 		
