@@ -9,11 +9,10 @@ setup(name= name,
 	  author = author, 
 	  author_email = author_email, 
 	  url = url, 
-	  package_dir={'VisualPyTune': './dist'},
-#	  packages=['dist'],
+	  package_dir={'VisualPyTune': '.'},
 	  data_files = [ \
 		('option', ['dist/option/ui.cfg']), \
-		('', glob('dist/*.exe') + glob('dist/*.dll') + glob('dist/*.pyd') + glob('dist/*.zip')), \
+		('', glob('*.py'), \
 		('', ['dist/licence']), \
 		('res', ['dist/res/Py.ico']), \
 		('res/codectrl', glob('dist/res/codectrl/*.png')), \

@@ -44,12 +44,15 @@ def str2list(s):
 	return map(lambda x: x.strip(), s.split(sep))
 
 class UIConfig(Singleton):
+	import util
+#	cfg = util.GenCfgPath('option', 'ui.cfg')
+	cfg = 'option/ui.cfg'
 	def __init__(self):
 		self.__init()
 		self.modified = False
 	
 	def __init(self):
-		self.file = self.opencfg('option/ui.cfg')
+		self.file = self.opencfg(UIConfig.cfg)
 		self.cfg = Parser()
 		self.cfg.readfp(self.file)
 		self.file.close()
@@ -138,7 +141,7 @@ class UIConfig(Singleton):
 inst = UIConfig()
 		
 if __name__ == '__main__':
-	op = UIConfig.inst
+	op = UIConfig.inst()
 	
 	print op.getLastDir()
 	op.setLastDir('C:/')

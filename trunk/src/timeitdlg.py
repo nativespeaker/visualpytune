@@ -7,9 +7,12 @@ from codectrl.codeview import DemoCodeEditor as CodeEditor
 dlgsize = (640, 480)
 
 class PathOptoin(object):
+	import util
+#	cfg = util.GenCfgPath('option', 'path.cfg')
+	cfg = 'option/path.cfg'
 	def __init__(self):
 		try:
-			fd = open('option/path.cfg','r')
+			fd = open(PathOptoin.cfg,'r')
 		except IOError:
 			self.path = ''
 			return
@@ -23,7 +26,7 @@ class PathOptoin(object):
 		if path == self.path:
 			return
 		self.path = path
-		fd = open('option/path.cfg','w')
+		fd = open(PathOptoin.cfg,'w')
 		fd.write(path)
 		fd.close()
 
@@ -216,7 +219,7 @@ class TimeitDlg(wx.Dialog):
 		
 	def OnDirbtn(self, evt):
 		dlg = wx.DirDialog(self, "Choose python directory:",
-						  style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
+						  style=wx.DD_DEFAULT_STYLE)
 		if dlg.ShowModal() == wx.ID_OK:
 			self.path.SetValue(dlg.GetPath())
 		dlg.Destroy()
@@ -225,36 +228,39 @@ class TimeitDlg(wx.Dialog):
 		self.Reset()
 		
 	def OnOk(self, evt):
-		import os
-		path = self.path.GetValue()
-		if path == '' or not os.path.isdir(path):
-			wx.MessageDialog(self, \
-				message = 'Set python path first, please.', \
-				caption = 'Timeit', \
-				style = wx.OK | wx.ICON_EXCLAMATION).ShowModal()
-			return
-		stmt = self.stmt.GetText()
-		setup = self.setup.GetText()
-		import subprocess, os
-		cmd = 'python ./lib/timeit.py -n %s -r %s '%( \
-			self.number.GetValue(), \
-			self.repeat.GetValue())
-		if setup:
-			cmd += '-s ' + '"%s"'%setup + ' '
-		cmd += '"%s"'%stmt
-		print cmd
-		p = subprocess.Popen(cmd, shell = True, \
-				cwd = self.path.GetValue(), \
-				stderr = subprocess.PIPE, \
-				stdout = subprocess.PIPE)
-		p.wait()
-		self.result.SetValue( \
-			'============ Error ============\n' \
-			+ p.stderr.read() \
-			+ '============== Output ==========\n' \
-			+ p.stdout.read() )
-		if self.resultbtn.closed:
-			self.OnResultbtn(None)
+		pass
+#		import os
+#		path = self.path.GetValue()
+#		if path == '' or not os.path.isdir(path):
+#			wx.MessageDialog(self, \
+#				message = 'Set python path first, please.', \
+#				caption = 'Timeit', \
+#				style = wx.OK | wx.ICON_EXCLAMATION).ShowModal()
+#			return
+#		stmt = self.stmt.GetText()
+#		setup = self.setup.GetText()
+#		import subprocess, os, sys
+#		cmd = '%s %s -n %s -r %s '%( \
+#			sys.executable, \
+#			os.path.join(os.path.dirname(sys.executable),'lib', 'timeit.pyc'), \
+#			self.number.GetValue(), \
+#			self.repeat.GetValue())
+#		if setup:
+#			cmd += '-s ' + '"%s"'%setup + ' '
+#		cmd += '"%s"'%stmt
+#		print cmd
+#		p = subprocess.Popen(cmd, shell = True, \
+#				cwd = self.path.GetValue(), \
+#				stderr = subprocess.PIPE, \
+#				stdout = subprocess.PIPE)
+#		p.wait()
+#		self.result.SetValue( \
+#			'============ Error ============\n' \
+#			+ p.stderr.read() \
+#			+ '============== Output ==========\n' \
+#			+ p.stdout.read() )
+#		if self.resultbtn.closed:
+#			self.OnResultbtn(None)
 		
 	def OnClose(self, evt):
 		self.pathoption.SetPath(self.path.GetValue())
@@ -275,6 +281,7 @@ class TimeitDlg(wx.Dialog):
 def ShowTimeitDlg(parent):
 	dlg = TimeitDlg(parent, wx.NewId(), 'Timeit')
 	dlg.ShowModal()
+	dlg.Destroy()
 	
 if __name__ == '__main__':
 	app = wx.PySimpleApp()
