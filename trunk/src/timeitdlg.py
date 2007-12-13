@@ -121,7 +121,7 @@ class TimeitDlg(wx.Dialog):
 			flag = wx.ALIGN_LEFT)
 		self.path = wx.TextCtrl(self)
 		hbox.Add(self.path, proportion = 1, flag = wx.ALIGN_RIGHT | wx.EXPAND)
-		self.dirbtn = wx.Button(self, wx.ID_ANY, '...')
+		self.dirbtn = wx.Button(self, wx.ID_ANY, '...', style = wx.BU_EXACTFIT )
 		hbox.Add(self.dirbtn, border = 10, flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
 		self.pathbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
 		
