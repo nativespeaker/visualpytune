@@ -7,4 +7,4 @@ def GenCfgPath(*a):
 	if exe.endswith('vpt.exe'):
 		return os.path.join(os.path.dirname(sys.executable), *a)
 	else:
-		return os.path.join(*a)
+		return os.path.join(os.path.dirname(__file__), *a)

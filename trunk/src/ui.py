@@ -238,12 +238,16 @@ def createMainUI(frm):
 	frm.statspanel.listctrl.selected_callback = OnStatsSelected
 	
 	def OnDirCtrlSelChanged(evt):
-		path = frm.viewpanel.dirctrl.GetFilePath()
-		if path:
-			frm.OpenFile(path)
-	frm.viewpanel.dirctrl.GetTreeCtrl().Bind(wx.EVT_TREE_SEL_CHANGED, \
-								OnDirCtrlSelChanged)
-	
+		p = frm.viewpanel.dirctrl.GetFilePath()
+		if p and os.path.isfile(p):
+			frm.OpenFile(p)
+		evt.Skip()
+#	frm.viewpanel.dirctrl.GetTreeCtrl().Bind(wx.EVT_TREE_SEL_CHANGED, \
+#								OnDirCtrlSelChanged)
+	wx.EVT_TREE_SEL_CHANGED(frm.viewpanel.dirctrl, \
+		frm.viewpanel.dirctrl.GetTreeCtrl().GetId(), \
+		OnDirCtrlSelChanged)
+		
 	def OnSize(evt):
 		size = evt.GetSize()
 		UIConfig.inst().setWindowSize((size.x, size.y))
@@ -251,8 +255,9 @@ def createMainUI(frm):
 	frm.Bind(wx.EVT_SIZE, OnSize, frm)
 		
 	def OnClose(evt):
+		path = frm.viewpanel.dirctrl.GetPath()
 		UIConfig.inst().setLastDir( \
-			os.path.dirname(frm.viewpanel.dirctrl.GetPath()))
+			path if os.path.isdir(path) else os.path.dirname(path))
 		UIConfig.inst().setMaximized( \
 			frm.IsMaximized())
 		UIConfig.inst().setWindowPos(frm.GetPositionTuple())
@@ -266,10 +271,12 @@ def createMainUI(frm):
 		
 def AddMiscFunc(frm):
 	def GetDirCtrlFilePath():
-		path = frm.viewpanel.dirctrl.GetFilePath()
+		path = frm.viewpanel.dirctrl.GetPath()
 		if path:
-			return path
-		import os
+			if os.path.isdir(path):
+				return path
+			else:
+				return os.path.dirname(path)
 		return os.getcwd()
 	frm.GetDirCtrlFilePath = GetDirCtrlFilePath
 	
@@ -279,6 +286,7 @@ def AddMiscFunc(frm):
 	
 	def OpenFile(path):
 		assert path
+		print 'open', path
 		from statsmodel import StatsModel
 		try:
 			frm.model = StatsModel(path)
