@@ -12,7 +12,7 @@ setup(name= name,
 	  package_dir={'VisualPyTune': '.'},
 	  data_files = [ \
 		('option', ['dist/option/ui.cfg']), \
-		('', glob('*.py'), \
+		('', glob('*.py')), \
 		('', ['dist/licence']), \
 		('res', ['dist/res/Py.ico']), \
 		('res/codectrl', glob('dist/res/codectrl/*.png')), \
