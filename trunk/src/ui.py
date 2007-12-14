@@ -2,7 +2,9 @@
 
 import wx
 import os
-		
+
+import image_path as IP
+	
 def show(func):
 	def show_func(*a, **k):
 		obj = func(*a, **k)
@@ -59,12 +61,12 @@ def createMenu(frm):
 		ID_OPEN = wx.NewId()
 		item_open = wx.MenuItem(menu, ID_OPEN, \
 			'&Open...\tCtrl+Q', 'Open profile stats file.')
-		item_open.SetBitmap(wx.Bitmap('res/menu/document-open.png'))
+		item_open.SetBitmap(wx.Bitmap(IP.Menu.open))
 		menu.AppendItem(item_open)
 		frm.Bind(wx.EVT_MENU, _open, id = ID_OPEN)
 		# add toolbar button
 		frm.toolbar.AddLabelTool(ID_OPEN, '', \
-			wx.Bitmap('res/toolbar/document-open.png'), \
+			wx.Bitmap(IP.Toolbar.open), \
 			shortHelp = 'Open profile stats file.')
 		frm.toolbar.Realize()
 		
@@ -84,12 +86,12 @@ def createMenu(frm):
 		ID_SAVE = wx.NewId()
 		item_save = wx.MenuItem(menu, ID_SAVE, \
 			'&Save...\tCtrl+S', 'save profile stats to text file.')
-		item_save.SetBitmap(wx.Bitmap('res/menu/document-save.png'))
+		item_save.SetBitmap(wx.Bitmap(IP.Menu.save))
 		menu.AppendItem(item_save)
 		frm.Bind(wx.EVT_MENU, save, id = ID_SAVE)
 		# add toolbar button
 		frm.toolbar.AddLabelTool(ID_SAVE, '', \
-			wx.Bitmap('res/toolbar/document-save.png'), \
+			wx.Bitmap(IP.Menu.save), \
 			shortHelp = 'Save profile stats to text file.')
 			
 		frm.toolbar.Realize()
@@ -104,7 +106,7 @@ def createMenu(frm):
 		
 		ID_QUIT = wx.NewId()
 		item_quit = wx.MenuItem(menu, ID_QUIT, '&Quit\tCtrl+Q', 'Quit Application!')
-		item_quit.SetBitmap(wx.Bitmap('res/menu/process-stop.png'))
+		item_quit.SetBitmap(wx.Bitmap(IP.Menu.quit))
 		menu.AppendItem(item_quit)
 		frm.Bind(wx.EVT_MENU, quit, id = ID_QUIT)
 		
@@ -121,11 +123,11 @@ def createMenu(frm):
 		
 		ID_TIMEIT = wx.NewId()
 		item_timeit = wx.MenuItem(menu, ID_TIMEIT, '&Time It\tCtrl+T')
-		item_timeit.SetBitmap(wx.Bitmap('res/menu/utilities-system-monitor.png'))
+		item_timeit.SetBitmap(wx.Bitmap(IP.Menu.timeit))
 		menu.AppendItem(item_timeit)
 		frm.Bind(wx.EVT_MENU, timeit, id = ID_TIMEIT)
 		frm.toolbar.AddLabelTool(ID_TIMEIT, '', \
-			wx.Bitmap('res/toolbar/utilities-system-monitor.png'), \
+			wx.Bitmap(IP.Toolbar.timeit), \
 			shortHelp = 'Time it')
 		frm.toolbar.AddSeparator()
 		frm.toolbar.Realize()
@@ -144,12 +146,12 @@ def createMenu(frm):
 			pass
 		ID_HELP = wx.NewId()
 		item_help = wx.MenuItem(menu, ID_HELP, '&Help\tCtrl+H')
-		item_help.SetBitmap(wx.Bitmap('res/menu/help-browser.png'))
+		item_help.SetBitmap(wx.Bitmap(IP.Menu.help))
 		menu.AppendItem(item_help)
 		frm.Bind(wx.EVT_MENU, help, id = ID_HELP)
 		# add toolbar button
 		frm.toolbar.AddLabelTool(ID_HELP, '', \
-			wx.Bitmap('res/toolbar/help-browser.png'), \
+			wx.Bitmap(IP.Toolbar.help), \
 			shortHelp = 'Help')
 		
 		frm.toolbar.Realize()		
@@ -167,7 +169,7 @@ def createMenu(frm):
 				info.SetLicence(''.join(lic.readlines()))
 				lic.close()
 				
-				info.SetIcon(wx.Icon('res/Py.ico', wx.BITMAP_TYPE_ICO))
+				info.SetIcon(wx.Icon(IP.PY_ICO, wx.BITMAP_TYPE_ICO))
 				info.SetName(name)
 				info.SetVersion(ver)
 				info.SetDescription( \
@@ -320,7 +322,7 @@ def createUI(*a, **k):
 		
 	obj = wx.Frame(*a, **k)
 	
-	obj.SetIcon(wx.Icon('res/Py.ico', wx.BITMAP_TYPE_ICO))
+	obj.SetIcon(wx.Icon(IP.PY_ICO, wx.BITMAP_TYPE_ICO))
 	createToolbar(obj)
 	createMenu(obj)
 	createStatusbar(obj)
