@@ -1,6 +1,7 @@
 ﻿# -*- coding: utf-8 -*- 
 
 import wx
+import subprocess, os, sys
 from wx.lib.intctrl import IntCtrl
 from codectrl.codeview import DemoCodeEditor as CodeEditor
 
@@ -222,8 +223,13 @@ class TimeitDlg(wx.Dialog):
 		btn.closed ^= True
 		
 	def OnDirbtn(self, evt):
-		dlg = wx.DirDialog(self, "Choose python directory:",
-						  style=wx.DD_DEFAULT_STYLE)
+		dlg = wx.FileDialog(self, \
+				message = "Choose python directory:",
+				defaultDir=os.getcwd(),
+				defaultFile="python*",
+				wildcard="python executable file (python*)|python*|" \
+							"All files (*.*)|*.*",
+				style=wx.OPEN | wx.CHANGE_DIR)
 		if dlg.ShowModal() == wx.ID_OK:
 			self.path.SetValue(dlg.GetPath())
 		dlg.Destroy()
@@ -232,39 +238,36 @@ class TimeitDlg(wx.Dialog):
 		self.Reset()
 		
 	def OnOk(self, evt):
-		pass
-#		import os
-#		path = self.path.GetValue()
-#		if path == '' or not os.path.isdir(path):
-#			wx.MessageDialog(self, \
-#				message = 'Set python path first, please.', \
-#				caption = 'Timeit', \
-#				style = wx.OK | wx.ICON_EXCLAMATION).ShowModal()
-#			return
-#		stmt = self.stmt.GetText()
-#		setup = self.setup.GetText()
-#		import subprocess, os, sys
-#		cmd = '%s %s -n %s -r %s '%( \
-#			sys.executable, \
-#			os.path.join(os.path.dirname(sys.executable),'lib', 'timeit.pyc'), \
-#			self.number.GetValue(), \
-#			self.repeat.GetValue())
-#		if setup:
-#			cmd += '-s ' + '"%s"'%setup + ' '
-#		cmd += '"%s"'%stmt
-#		print cmd
-#		p = subprocess.Popen(cmd, shell = True, \
-#				cwd = self.path.GetValue(), \
-#				stderr = subprocess.PIPE, \
-#				stdout = subprocess.PIPE)
-#		p.wait()
-#		self.result.SetValue( \
-#			'============ Error ============\n' \
-#			+ p.stderr.read() \
-#			+ '============== Output ==========\n' \
-#			+ p.stdout.read() )
-#		if self.resultbtn.closed:
-#			self.OnResultbtn(None)
+		path = self.path.GetValue()
+		if path == '' or not os.path.isfile(path):
+			wx.MessageDialog(self, \
+				message = 'Set python path first, please.', \
+				caption = 'Timeit', \
+				style = wx.OK | wx.ICON_EXCLAMATION).ShowModal()
+			return
+		stmt = self.stmt.GetText()
+		setup = self.setup.GetText()
+		cmd = '%s %s -n %s -r %s '%( \
+			path, \
+			os.path.join(os.path.dirname(path),'lib', 'timeit.pyc'), \
+			self.number.GetValue(), \
+			self.repeat.GetValue())
+		if setup:
+			cmd += '-s ' + '"%s"'%setup + ' '
+		cmd += '"%s"'%stmt
+		print cmd
+		p = subprocess.Popen(cmd, shell = True, \
+				cwd = os.path.dirname(path), \
+				stderr = subprocess.PIPE, \
+				stdout = subprocess.PIPE)
+		p.wait()
+		self.result.SetValue( \
+			'============ Error ============\n' \
+			+ p.stderr.read() \
+			+ '============== Output ==========\n' \
+			+ p.stdout.read() )
+		if self.resultbtn.closed:
+			self.OnResultbtn(None)
 		
 	def OnClose(self, evt):
 		self.pathoption.SetPath(self.path.GetValue())
