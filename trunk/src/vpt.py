@@ -15,7 +15,7 @@ def try_psyco():
 		print >>sys.stderr, 'Psyco is not installed!'
 
 def main():
-#	try_psyco()
+	try_psyco()
 	app = wx.PySimpleApp()
 	frame = ui.createUI(None, wx.ID_ANY, name + ' ' + ver)
 	app.MainLoop()

@@ -328,7 +328,8 @@ def createUI(*a, **k):
 	AddMiscFunc(obj)
 	
 	if UIConfig.inst().getMaximized():
-		wx.CallAfter(obj.Maximize)
+#		wx.CallAfter(obj.Maximize)
+		obj.Maximize()
 	
 	return obj
 	
