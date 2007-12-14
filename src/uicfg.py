@@ -46,7 +46,7 @@ def str2list(s):
 class UIConfig(Singleton):
 	import util
 	cfg = util.GenCfgPath('option', 'ui.cfg')
-	print cfg
+#	print cfg
 #	cfg = 'option/ui.cfg'
 	def __init__(self):
 		self.__init()
