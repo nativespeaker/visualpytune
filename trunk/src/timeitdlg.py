@@ -112,7 +112,7 @@ class TimeitDlg(wx.Dialog):
 		
 		# --------------- Python Path ------------------------------------
 		hbox = wx.BoxSizer(wx.HORIZONTAL)
-		self.pathbtn = wx.Button(self, wx.ID_ANY, 'Path >>')
+		self.pathbtn = wx.Button(self, wx.ID_ANY, 'Path <<')
 		self.pathbtn.closed = False
 		hbox.Add(self.pathbtn, \
 			border = 10, \
