@@ -43,7 +43,7 @@ class TimeitDlg(wx.Dialog):
 		
 		# --------------- statement ------------------------------------
 		hbox = wx.BoxSizer(wx.HORIZONTAL)
-		self.stmtbtn = wx.Button(self, wx.ID_ANY, 'Statement >>')
+		self.stmtbtn = wx.Button(self, wx.ID_ANY, 'Statement <<')
 		self.stmtbtn.closed = False
 		hbox.Add(self.stmtbtn, \
 			border = 10, \
