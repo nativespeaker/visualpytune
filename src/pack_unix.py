@@ -11,12 +11,12 @@ setup(name= name,
 	  url = url, 
 	  package_dir={'VisualPyTune': '.'},
 	  data_files = [ \
-		('option', ['dist/option/ui.cfg']), \
+		('option', ['option/ui.cfg']), \
 		('', glob('*.py')), \
-		('', ['dist/licence']), \
-		('res', ['dist/res/Py.ico']), \
-		('res/codectrl', glob('dist/res/codectrl/*.png')), \
-		('res/menu', glob('dist/res/menu/*.png')), \
-		('res/toolbar', glob('dist/res/toolbar/*.png'))
+		('', ['licence']), \
+		('res', ['res/Py.ico']), \
+		('res/codectrl', glob('res/codectrl/*.png')), \
+		('res/menu', glob('res/menu/*.png')), \
+		('res/toolbar', glob('res/toolbar/*.png'))
 	  	]
 	  )
