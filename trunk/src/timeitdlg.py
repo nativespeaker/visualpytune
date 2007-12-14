@@ -247,9 +247,16 @@ class TimeitDlg(wx.Dialog):
 			return
 		stmt = self.stmt.GetText()
 		setup = self.setup.GetText()
+		
+		if sys.platform == 'win32':
+			timeit_path = os.path.join(os.path.dirname(path),'lib', 'timeit.pyc'), \
+		else:
+			import timeit
+			timeit_path = timeit.__file__
+		
 		cmd = '%s %s -n %s -r %s '%( \
 			path, \
-			os.path.join(os.path.dirname(path),'lib', 'timeit.pyc'), \
+			timeit_path, \
 			self.number.GetValue(), \
 			self.repeat.GetValue())
 		if setup:
