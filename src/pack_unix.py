@@ -13,6 +13,7 @@ setup(name= name,
 	  data_files = [ \
 		('option', ['option/ui.cfg']), \
 		('', glob('*.py')), \
+	  	('codectrl', glob('codectrl/*.py')), \
 		('', ['licence']), \
 		('res', ['res/Py.ico']), \
 		('res/codectrl', glob('res/codectrl/*.png')), \
