@@ -10,7 +10,7 @@ dlgsize = (640, 480)
 class PathOptoin(object):
 	import util
 	cfg = util.GenCfgPath('option', 'path.cfg')
-	print cfg
+#	print cfg
 #	cfg = 'option/path.cfg'
 	def __init__(self):
 		try:
