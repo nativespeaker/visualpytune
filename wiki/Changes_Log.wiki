@@ -12,7 +12,7 @@ _12/14/2007_
  # Linux source code package.
  # Optional [http://psyco.sourceforge.net/ Psyco] optimize, enable default on Win32 installer.
 
-*VisualPyTune(VPT) 0.1.1 Released!*
+*VisualPyTune(VPT) 0.1.0 Released!*
 _11/31/2007_
 
 first release.
