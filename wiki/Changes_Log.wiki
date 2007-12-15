@@ -1,0 +1,18 @@
+#labels Featured,Phase-Support
+*VisualPyTune(VPT) 0.1.1 Released!*
+
+_12/14/2007_
+ === Fixed bugs ===
+ # Can't found gdiplus.dll and mscvp71.dll on Win32.
+ # Can't found py.ico on linux.
+ # GUI Timeit isn't works.
+ # Can't shutdown VPT by click close button on title-bar.
+ === Added ===
+ # Win32 installer executable file.
+ # Linux source code package.
+ # Optional [http://psyco.sourceforge.net/ Psyco] optimize, enable default on Win32 installer.
+
+*VisualPyTune(VPT) 0.1.1 Released!*
+_11/31/2007_
+
+first release.
