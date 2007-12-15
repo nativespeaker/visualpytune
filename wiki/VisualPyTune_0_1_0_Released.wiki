@@ -1,4 +1,4 @@
-#labels Featured
+#labels Phase-Support
 = 可视化的 Python 性能调优工具 VisualPyTune (0.1.0 版) 发布 =
 
 == 缘起：==
