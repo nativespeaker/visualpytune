@@ -305,6 +305,17 @@ def AddMiscFunc(frm):
 		frm.model.save_stats(path)
 	frm.SaveStats = SaveStats
 		
+def AddDragAndDropSupport(frm):
+	class FileDrop(wx.FileDropTarget):
+		def OnDropFiles(self, x, y, fns):
+			if len(fns) > 1:
+				wx.MessageDialog(frm, "Drop too many files !").ShowModal()
+				return
+			frm.OpenFile(fns[0])
+	
+	dt = FileDrop()
+	frm.SetDropTarget(dt)
+	
 #@centre
 #@fullscreen
 @show
@@ -328,6 +339,7 @@ def createUI(*a, **k):
 	createStatusbar(obj)
 	createMainUI(obj)
 	AddMiscFunc(obj)
+	AddDragAndDropSupport(obj)
 	
 	if UIConfig.inst().getMaximized():
 #		wx.CallAfter(obj.Maximize)
