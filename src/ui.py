@@ -60,7 +60,7 @@ def createMenu(frm):
 				frm.SetDirCtrlFilePath(os.path.dirname(path))
 		ID_OPEN = wx.NewId()
 		item_open = wx.MenuItem(menu, ID_OPEN, \
-			'&Open...\tCtrl+Q', 'Open profile stats file.')
+			'&Open...\tCtrl+O', 'Open profile stats file.')
 		item_open.SetBitmap(wx.Bitmap(IP.Menu.open))
 		menu.AppendItem(item_open)
 		frm.Bind(wx.EVT_MENU, _open, id = ID_OPEN)
@@ -91,7 +91,7 @@ def createMenu(frm):
 		frm.Bind(wx.EVT_MENU, save, id = ID_SAVE)
 		# add toolbar button
 		frm.toolbar.AddLabelTool(ID_SAVE, '', \
-			wx.Bitmap(IP.Menu.save), \
+			wx.Bitmap(IP.Toolbar.save), \
 			shortHelp = 'Save profile stats to text file.')
 			
 		frm.toolbar.Realize()
@@ -117,6 +117,19 @@ def createMenu(frm):
 		
 		mb.Append(menu, '&Tools')
 		
+		def prof(evt):
+			from profdlg import ShowProfDlg
+			ShowProfDlg(frm)
+		ID_PROF = wx.NewId()
+		item_prof = wx.MenuItem(menu, ID_PROF, '&Profile\tCtrl+P')
+		item_prof.SetBitmap(wx.Bitmap(IP.Menu.prof))
+		menu.AppendItem(item_prof)
+		menu.AppendSeparator()
+		frm.Bind(wx.EVT_MENU, prof, id = ID_PROF)
+		frm.toolbar.AddLabelTool(ID_PROF, '', \
+			wx.Bitmap(IP.Toolbar.prof), \
+			shortHelp = 'Profile')
+		
 		def timeit(evt):
 			from timeitdlg import ShowTimeitDlg
 			ShowTimeitDlg(frm)
@@ -129,6 +142,7 @@ def createMenu(frm):
 		frm.toolbar.AddLabelTool(ID_TIMEIT, '', \
 			wx.Bitmap(IP.Toolbar.timeit), \
 			shortHelp = 'Time it')
+			
 		frm.toolbar.AddSeparator()
 		frm.toolbar.Realize()
 		

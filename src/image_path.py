@@ -23,14 +23,16 @@ class Toolbar(object):
 	save = join(RES_TOOLBAR, 'document-save.png')
 	help = join(RES_TOOLBAR, 'help-browser.png')
 	quit = join(RES_TOOLBAR, 'process-stop.png')
-	timeit = join(RES_TOOLBAR, 'utilities-system-monitor.png')
+	prof = join(RES_TOOLBAR, 'utilities-system-monitor.png')
+	timeit = join(RES_TOOLBAR, 'image-loading.png')
 	
 class Menu(object):
 	open = join(RES_MENU, 'document-open.png')
 	save = join(RES_MENU, 'document-save.png')
 	help = join(RES_MENU, 'help-browser.png')
 	quit = join(RES_MENU, 'process-stop.png')
-	timeit = join(RES_MENU, 'utilities-system-monitor.png')
+	prof = join(RES_MENU, 'utilities-system-monitor.png')
+	timeit = join(RES_MENU, 'image-loading.png')
 	
 class Codectrl(object):
 	new = join(RES_CODECTRL, 'document-new.png')
