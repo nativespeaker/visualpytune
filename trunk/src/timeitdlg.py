@@ -271,7 +271,7 @@ class TimeitDlg(wx.Dialog):
 		
 	def OnClose(self, evt):
 		self.pathoption.SetPath(self.path.GetValue())
-		evt.Skip()
+		self.Destroy()
 		
 	def Reset(self):
 		self.stmt.SetValue('')
@@ -287,9 +287,9 @@ class TimeitDlg(wx.Dialog):
 		
 def ShowTimeitDlg(parent):
 	dlg = TimeitDlg(parent, wx.NewId(), 'Timeit')
-	dlg.ShowModal()
-	dlg.Destroy()
+	dlg.Show()
 	
 if __name__ == '__main__':
 	app = wx.PySimpleApp()
 	ShowTimeitDlg(None)
+	app.MainLoop()

@@ -10,11 +10,16 @@ class ProfDlg(wx.Dialog):
 		
 		vbox = wx.BoxSizer(wx.VERTICAL)
 		
-def ShowTimeitDlg(parent):
+		self.Bind(wx.EVT_CLOSE, self.OnClose)
+		
+	def OnClose(self, evt):
+		self.Destroy()
+		
+def ShowProfDlg(parent):
 	dlg = ProfDlg(parent, wx.NewId(), 'Profile')
-	dlg.ShowModal()
-	dlg.Destroy()
+	dlg.Show()
 	
 if __name__ == '__main__':
 	app = wx.PySimpleApp()
-	ShowTimeitDlg(None)
+	ShowProfDlg(None)
+	app.MainLoop()
