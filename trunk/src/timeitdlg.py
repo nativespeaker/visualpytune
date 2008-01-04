@@ -7,6 +7,17 @@ from codectrl.codeview import DemoCodeEditor as CodeEditor
 
 dlgsize = (640, 480)
 
+timeit_file_template = """
+# -*- coding:utf-8 -*-
+from timeit import Timer
+t = Timer('''%s''', '''%s''')
+n, r = %d, %d
+try:
+	print n, 'loops, best of ', r, ':', min(t.repeat(n, r)), 'sec per loop'
+except:
+	t.print_exc()
+"""
+
 class PathOptoin(object):
 	import util
 	cfg = util.GenCfgPath('option', 'path.cfg')
@@ -247,27 +258,72 @@ class TimeitDlg(wx.Dialog):
 			return
 		stmt = self.stmt.GetText()
 		setup = self.setup.GetText()
+		if not setup.strip():
+			setup = 'pass'
+#		cmd = '%s -m timeit -n %s -r %s '%( \
+#			path, \
+#			self.number.GetValue(), \
+#			self.repeat.GetValue())
+#		if setup:
+#			cmd += '-s ' + '"%s"'%setup + ' '
+#		cmd += '"%s"'%stmt
+#		print cmd
+#		p = subprocess.Popen(cmd, shell = True, \
+#				cwd = os.path.dirname(path), \
+#				stderr = subprocess.PIPE, \
+#				stdout = subprocess.PIPE)
+#		p.wait()
 		
-		cmd = '%s -m timeit -n %s -r %s '%( \
-			path, \
+#		tmp_file = os.getcwd() + '%d.py'%self.GetId()
+#		f = open(tmp_file, 'w')
+#		f.write(timeit_file_template%(stmt, setup, \
+#			self.number.GetValue(), \
+#			self.repeat.GetValue()))
+#		f.close()
+#		p = subprocess.Popen('python '+tmp_file, \
+#				shell = True, \
+#				cwd = os.path.dirname(path), \
+#				stderr = subprocess.PIPE, \
+#				stdout = subprocess.PIPE)
+#		p.wait()
+#		
+
+#		self.result.SetValue( \
+#			'============ Error ============\n' \
+#			+ p.stderr.read() \
+#			+ '============== Output ==========\n' \
+#			+ p.stdout.read() )
+#		if self.resultbtn.closed:
+#			self.OnResultbtn(None)
+		class TimeitProc(wx.Process):
+			def OnTerminate(inst, pid, status):
+				def getstr(stream):
+					s = ''
+					while True:
+						c = stream.GetC()
+						if 0 == stream.LastRead():
+							break
+						s += c
+					return s
+				self.result.SetValue( \
+					'============ Error ============\n' \
+					+ getstr(inst.GetErrorStream()) \
+					+ '\n============ Output ============\n' \
+					+ getstr(inst.GetInputStream()))
+				if self.resultbtn.closed:
+					self.OnResultbtn(None)
+					
+		tmp_file = os.getcwd() + '%d.py'%self.GetId()
+		f = open(tmp_file, 'w')
+		f.write(timeit_file_template%(stmt, setup, \
 			self.number.GetValue(), \
-			self.repeat.GetValue())
-		if setup:
-			cmd += '-s ' + '"%s"'%setup + ' '
-		cmd += '"%s"'%stmt
-		print cmd
-		p = subprocess.Popen(cmd, shell = True, \
-				cwd = os.path.dirname(path), \
-				stderr = subprocess.PIPE, \
-				stdout = subprocess.PIPE)
-		p.wait()
-		self.result.SetValue( \
-			'============ Error ============\n' \
-			+ p.stderr.read() \
-			+ '============== Output ==========\n' \
-			+ p.stdout.read() )
-		if self.resultbtn.closed:
-			self.OnResultbtn(None)
+			self.repeat.GetValue()))
+		f.close()
+
+		cmd = 'python '+tmp_file
+		proc = TimeitProc(self)
+		proc.Redirect()
+		wx.Execute(cmd, process = proc)
 		
 	def OnClose(self, evt):
 		self.pathoption.SetPath(self.path.GetValue())
