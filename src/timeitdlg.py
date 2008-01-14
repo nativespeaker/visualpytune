@@ -295,6 +295,13 @@ class TimeitDlg(wx.Dialog):
 #			+ p.stdout.read() )
 #		if self.resultbtn.closed:
 #			self.OnResultbtn(None)
+		tmp_file = os.getcwd() + '%d.py'%self.GetId()
+		f = open(tmp_file, 'w')
+		f.write(timeit_file_template%(stmt, setup, \
+			self.number.GetValue(), \
+			self.repeat.GetValue()))
+		f.close()
+		
 		class TimeitProc(wx.Process):
 			def OnTerminate(inst, pid, status):
 				def getstr(stream):
@@ -312,14 +319,8 @@ class TimeitDlg(wx.Dialog):
 					+ getstr(inst.GetInputStream()))
 				if self.resultbtn.closed:
 					self.OnResultbtn(None)
-					
-		tmp_file = os.getcwd() + '%d.py'%self.GetId()
-		f = open(tmp_file, 'w')
-		f.write(timeit_file_template%(stmt, setup, \
-			self.number.GetValue(), \
-			self.repeat.GetValue()))
-		f.close()
-
+				os.remove(tmp_file)
+				
 		cmd = 'python '+tmp_file
 		proc = TimeitProc(self)
 		proc.Redirect()
