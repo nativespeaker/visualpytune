@@ -2,11 +2,12 @@
 
 import wx
 import os
-
 dlgsize = (640, 480)
 
 class ProfDlg(wx.Dialog):
 	def __init__(self, *a, **k):
+		self.pypath = k.pop('python_path')
+		assert os.path.isfile(self.pypath)
 		super(ProfDlg, self).__init__(size = dlgsize, *a, **k)
 		
 		vbox = wx.BoxSizer(wx.VERTICAL)
@@ -47,19 +48,18 @@ class ProfDlg(wx.Dialog):
 		CreateEntryCtrls()
 		
 		def CreateStatsCtrls():
-			hbox = wx.BoxSizer(wx.HORIZONTAL)
-			
-			self.savetofile = wx.CheckBox(self, wx.ID_ANY, 'Save to file: ')
-			self.savetofile.SetValue(True)
-			self.savetofile.Bind(wx.EVT_CHECKBOX, self.OnSavetofile)
-			hbox.Add(self.savetofile, \
-				border = 5, \
-				flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
-			
 #			hbox = wx.BoxSizer(wx.HORIZONTAL)
-#			hbox.Add(wx.StaticText(self, wx.ID_ANY, 'Stats output file: '), \
+#			self.savetofile = wx.CheckBox(self, wx.ID_ANY, 'Save to file: ')
+#			self.savetofile.SetValue(True)
+#			self.savetofile.Bind(wx.EVT_CHECKBOX, self.OnSavetofile)
+#			hbox.Add(self.savetofile, \
 #				border = 5, \
 #				flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
+			
+			hbox = wx.BoxSizer(wx.HORIZONTAL)
+			hbox.Add(wx.StaticText(self, wx.ID_ANY, 'Stats output file: '), \
+				border = 5, \
+				flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
 			self.stats = wx.TextCtrl(self, wx.ID_ANY)
 			hbox.Add(self.stats, \
 				border = 5, \
@@ -74,30 +74,30 @@ class ProfDlg(wx.Dialog):
 				border = 5, \
 				flag = wx.TOP | wx.EXPAND)
 			
-			hbox = wx.BoxSizer(wx.HORIZONTAL)
-			hbox.Add(wx.StaticText(self, wx.ID_ANY, 'Sort by: '), \
-				border = 5, \
-				flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
-			self.sortby = wx.ComboBox(self, wx.ID_ANY, \
-					value = 'cumulative (cumulative time)', \
-					choices = [
-						'calls (call count)',
-						'cumulative (cumulative time)',
-						'file (file name)',
-						'module (file name)',
-						'pcalls (primitive call count)',
-						'line (line number)',
-						'name (function name)',
-						'nfl (name/file/line)',
-						'stdname (standard name)',
-						'time (internal time)'])
-			self.sortby.Enable(False)
-			hbox.Add(self.sortby, \
-				border = 5, \
-				flag = wx.LEFT | wx.RIGHT | wx.ALIGN_CENTRE_VERTICAL)
-			vbox.Add(hbox, \
-				border = 5, \
-				flag = wx.TOP | wx.ALIGN_CENTRE_VERTICAL)
+#			hbox = wx.BoxSizer(wx.HORIZONTAL)
+#			hbox.Add(wx.StaticText(self, wx.ID_ANY, 'Sort by: '), \
+#				border = 5, \
+#				flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
+#			self.sortby = wx.ComboBox(self, wx.ID_ANY, \
+#					value = 'cumulative (cumulative time)', \
+#					choices = [
+#						'calls (call count)',
+#						'cumulative (cumulative time)',
+#						'file (file name)',
+#						'module (file name)',
+#						'pcalls (primitive call count)',
+#						'line (line number)',
+#						'name (function name)',
+#						'nfl (name/file/line)',
+#						'stdname (standard name)',
+#						'time (internal time)'])
+#			self.sortby.Enable(False)
+#			hbox.Add(self.sortby, \
+#				border = 5, \
+#				flag = wx.LEFT | wx.RIGHT | wx.ALIGN_CENTRE_VERTICAL)
+#			vbox.Add(hbox, \
+#				border = 5, \
+#				flag = wx.TOP | wx.ALIGN_CENTRE_VERTICAL)
 		CreateStatsCtrls()
 		
 		def CreateProfCtrls():
@@ -191,10 +191,11 @@ class ProfDlg(wx.Dialog):
 		self.stdout.SetValue('')
 	
 	def OnOk(self, evt):
-		entry = self.entry.GetValue()
+		app = '%s %s'%(self.entry.GetValue(), self.app_args.GetValue())
 		stats = self.stats.GetValue()
+#		sortby = self.sortby.GetValue().partition(' ')[0]
 		profiler = self.profiler.GetValue().partition(' ')[0]
-		print 'proifle = ', profiler
+#		print 'profiler = ', profiler, 'sortby = ', sortby
 		
 		class TimeitProc(wx.Process):
 			def OnTerminate(inst, pid, status):
@@ -207,24 +208,41 @@ class ProfDlg(wx.Dialog):
 						s += c
 					return s
 				self.stdout.SetValue( \
-					'============ Error ============\n' \
-					+ getstr(inst.GetErrorStream()) \
-					+ '\n============ Output ============\n' \
-					+ getstr(inst.GetInputStream()))
+					getstr(inst.GetErrorStream()) \
+					+ getstr(inst.GetInputStream()) \
+					+ '\nProfiled .')
 				
-		cmd = 'python -m profile '
+		cmd = '%s -m %s '%(self.pypath, profiler)
+#		if self.savetofile.IsChecked():
+#			if stats:
+#				cmd += '-o %s '%stats
+#		else:
+#			cmd += '-s %s '%sortby
 		if stats:
-			cmd += '-o %s'%stats
-		cmd += ' ' + entry
+			cmd += '-o %s '%stats
+		cmd += app
+#		print cmd
+		self.stdout.SetValue('Pofiling, please wait ...')
 		proc = TimeitProc(self)
 		proc.Redirect()
 		wx.Execute(cmd, process = proc)
 		
-def ShowProfDlg(parent):
-	dlg = ProfDlg(parent, wx.NewId(), 'Profile')
+def ShowProfDlg(parent, pypath):
+	dlg = ProfDlg(parent, wx.NewId(), 'Profile wizard (step 2: profiling)', python_path = pypath)
 	dlg.Show()
+	
+def DoPorf(parent):
+	from askpypathdlg import AskPythonPathDlg
+	pypathdlg = AskPythonPathDlg(parent, \
+			wx.ID_ANY, \
+			'Profile wizard (step 1: setup python path)')
+	if pypathdlg.ShowModal() != wx.ID_OK:
+		return
+	pypath = pypathdlg.GetPath()
+	pypathdlg.Destroy()
+	ShowProfDlg(parent, pypath)
 	
 if __name__ == '__main__':
 	app = wx.PySimpleApp()
-	ShowProfDlg(None)
-	app.MainLoop()
+	DoPorf(None)
+#	app.MainLoop()

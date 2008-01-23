@@ -48,6 +48,8 @@ class PathOptoin(object):
 
 class TimeitDlg(wx.Dialog):
 	def __init__(self, *a, **k):
+		self.pypath = k.pop('python_path')
+		assert os.path.isfile(self.pypath)
 		super(TimeitDlg, self).__init__(size = dlgsize, *a, **k)
 		
 		vbox = wx.BoxSizer(wx.VERTICAL)
@@ -121,30 +123,30 @@ class TimeitDlg(wx.Dialog):
 		
 		vbox.Add(self.argsbox, flag = wx.EXPAND)
 		
-		# --------------- Python Path ------------------------------------
-		hbox = wx.BoxSizer(wx.HORIZONTAL)
-		self.pathbtn = wx.Button(self, wx.ID_ANY, 'Path <<')
-		self.pathbtn.closed = False
-		hbox.Add(self.pathbtn, \
-			border = 10, \
-			flag = wx.LEFT | wx.ALIGN_LEFT)
-		hbox.Add(wx.StaticLine(self), \
-			border = 10, \
-			proportion = 1, \
-			flag = wx.RIGHT | wx.ALIGN_CENTRE_VERTICAL)
-		vbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
-		
-		self.pathbox = wx.BoxSizer(wx.VERTICAL)
-		hbox = wx.BoxSizer(wx.HORIZONTAL)
-		hbox.Add(wx.StaticText(self, wx.ID_ANY, 'Python Path: '), \
-			flag = wx.ALIGN_LEFT)
-		self.path = wx.TextCtrl(self)
-		hbox.Add(self.path, proportion = 1, flag = wx.ALIGN_RIGHT | wx.EXPAND)
-		self.dirbtn = wx.Button(self, wx.ID_ANY, '...', style = wx.BU_EXACTFIT )
-		hbox.Add(self.dirbtn, border = 10, flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
-		self.pathbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
-		
-		vbox.Add(self.pathbox, flag = wx.EXPAND)
+#		# --------------- Python Path ------------------------------------
+#		hbox = wx.BoxSizer(wx.HORIZONTAL)
+#		self.pathbtn = wx.Button(self, wx.ID_ANY, 'Path <<')
+#		self.pathbtn.closed = False
+#		hbox.Add(self.pathbtn, \
+#			border = 10, \
+#			flag = wx.LEFT | wx.ALIGN_LEFT)
+#		hbox.Add(wx.StaticLine(self), \
+#			border = 10, \
+#			proportion = 1, \
+#			flag = wx.RIGHT | wx.ALIGN_CENTRE_VERTICAL)
+#		vbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
+#		
+#		self.pathbox = wx.BoxSizer(wx.VERTICAL)
+#		hbox = wx.BoxSizer(wx.HORIZONTAL)
+#		hbox.Add(wx.StaticText(self, wx.ID_ANY, 'Python Path: '), \
+#			flag = wx.ALIGN_LEFT)
+#		self.path = wx.TextCtrl(self)
+#		hbox.Add(self.path, proportion = 1, flag = wx.ALIGN_RIGHT | wx.EXPAND)
+#		self.dirbtn = wx.Button(self, wx.ID_ANY, '...', style = wx.BU_EXACTFIT )
+#		hbox.Add(self.dirbtn, border = 10, flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
+#		self.pathbox.Add(hbox, border = 10, flag = wx.TOP | wx.EXPAND)
+#		
+#		vbox.Add(self.pathbox, flag = wx.EXPAND)
 		
 		# ---------------- error and output ----------------------------
 		hbox = wx.BoxSizer(wx.HORIZONTAL)
@@ -249,13 +251,13 @@ class TimeitDlg(wx.Dialog):
 		self.Reset()
 		
 	def OnOk(self, evt):
-		path = self.path.GetValue()
-		if path == '' or not os.path.isfile(path):
-			wx.MessageDialog(self, \
-				message = 'Set python path first, please.', \
-				caption = 'Timeit', \
-				style = wx.OK | wx.ICON_EXCLAMATION).ShowModal()
-			return
+#		path = self.path.GetValue()
+#		if path == '' or not os.path.isfile(path):
+#			wx.MessageDialog(self, \
+#				message = 'Set python path first, please.', \
+#				caption = 'Timeit', \
+#				style = wx.OK | wx.ICON_EXCLAMATION).ShowModal()
+#			return
 		stmt = self.stmt.GetText()
 		setup = self.setup.GetText()
 		if not setup.strip():
@@ -321,7 +323,7 @@ class TimeitDlg(wx.Dialog):
 					self.OnResultbtn(None)
 				os.remove(tmp_file)
 				
-		cmd = 'python '+tmp_file
+		cmd = '%s '%self.pypath + tmp_file
 		proc = TimeitProc(self)
 		proc.Redirect()
 		wx.Execute(cmd, process = proc)
@@ -343,7 +345,7 @@ class TimeitDlg(wx.Dialog):
 		self.SetSize(dlgsize)
 		
 def ShowTimeitDlg(parent):
-	dlg = TimeitDlg(parent, wx.NewId(), 'Timeit')
+	dlg = TimeitDlg(parent, wx.NewId(), 'Timeit', python_path = 'C:\\python251\\python.exe')
 	dlg.Show()
 	
 if __name__ == '__main__':
