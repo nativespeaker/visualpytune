@@ -18,34 +18,6 @@ except:
 	t.print_exc()
 """
 
-class PathOptoin(object):
-	import util
-	cfg = util.GenCfgPath('option', 'path.cfg')
-#	print cfg
-#	cfg = 'option/path.cfg'
-	def __init__(self):
-		try:
-			fd = open(PathOptoin.cfg,'r')
-		except IOError:
-			self.path = ''
-			return
-		self.path = fd.read()
-		fd.close()
-		
-	def GetPath(self):
-		return self.path
-		
-	def SetPath(self, path):
-		if not path:
-			print 'return'
-			return
-		if path == self.path:
-			return
-		self.path = path
-		fd = open(PathOptoin.cfg,'w')
-		fd.write(path)
-		fd.close()
-
 class TimeitDlg(wx.Dialog):
 	def __init__(self, *a, **k):
 		self.pypath = k.pop('python_path')
@@ -179,10 +151,10 @@ class TimeitDlg(wx.Dialog):
 		self.stmtbtn.Bind(wx.EVT_BUTTON, self.OnStmtbtn)
 		self.setupbtn.Bind(wx.EVT_BUTTON, self.OnSetupbtn)
 		self.argsbtn.Bind(wx.EVT_BUTTON, self.OnArgsbtn)
-		self.pathbtn.Bind(wx.EVT_BUTTON, self.OnPathbtn)
+#		self.pathbtn.Bind(wx.EVT_BUTTON, self.OnPathbtn)
 		self.resultbtn.Bind(wx.EVT_BUTTON, self.OnResultbtn)
 		
-		self.dirbtn.Bind(wx.EVT_BUTTON, self.OnDirbtn)
+#		self.dirbtn.Bind(wx.EVT_BUTTON, self.OnDirbtn)
 		self.clean.Bind(wx.EVT_BUTTON, self.OnClean)
 		self.ok.Bind(wx.EVT_BUTTON, self.OnOk)
 		
@@ -194,18 +166,18 @@ class TimeitDlg(wx.Dialog):
 		self.OnSetupbtn(None)
 		self.OnResultbtn(None)
 		
-		self.pathoption = PathOptoin()
-		self.path.SetValue(self.pathoption.GetPath())
+#		self.pathoption = PathOptoin()
+#		self.path.SetValue(self.pathoption.GetPath())
 		
-	def OnPathbtn(self, evt):
-		if self.pathbtn.closed:
-			self.GetSizer().Show(self.pathbox, True, True)
-			self.pathbtn.SetLabel('Path <<')
-		else:
-			self.GetSizer().Show(self.pathbox, False, True)
-			self.pathbtn.SetLabel('Path >>')
-		self.Fit()
-		self.pathbtn.closed ^= True
+#	def OnPathbtn(self, evt):
+#		if self.pathbtn.closed:
+#			self.GetSizer().Show(self.pathbox, True, True)
+#			self.pathbtn.SetLabel('Path <<')
+#		else:
+#			self.GetSizer().Show(self.pathbox, False, True)
+#			self.pathbtn.SetLabel('Path >>')
+#		self.Fit()
+#		self.pathbtn.closed ^= True
 		
 	def OnArgsbtn(self, evt):
 		if self.argsbtn.closed:
@@ -235,17 +207,17 @@ class TimeitDlg(wx.Dialog):
 		self.Fit()
 		btn.closed ^= True
 		
-	def OnDirbtn(self, evt):
-		dlg = wx.FileDialog(self, \
-				message = "Choose python directory:",
-				defaultDir=os.getcwd(),
-				defaultFile="python*",
-				wildcard="python executable file (python*)|python*|" \
-							"All files (*.*)|*.*",
-				style=wx.OPEN | wx.CHANGE_DIR)
-		if dlg.ShowModal() == wx.ID_OK:
-			self.path.SetValue(dlg.GetPath())
-		dlg.Destroy()
+#	def OnDirbtn(self, evt):
+#		dlg = wx.FileDialog(self, \
+#				message = "Choose python directory:",
+#				defaultDir=os.getcwd(),
+#				defaultFile="python*",
+#				wildcard="python executable file (python*)|python*|" \
+#							"All files (*.*)|*.*",
+#				style=wx.OPEN | wx.CHANGE_DIR)
+#		if dlg.ShowModal() == wx.ID_OK:
+#			self.path.SetValue(dlg.GetPath())
+#		dlg.Destroy()
 		
 	def OnClean(self, evt):
 		self.Reset()
@@ -329,7 +301,7 @@ class TimeitDlg(wx.Dialog):
 		wx.Execute(cmd, process = proc)
 		
 	def OnClose(self, evt):
-		self.pathoption.SetPath(self.path.GetValue())
+#		self.pathoption.SetPath(self.path.GetValue())
 		self.Destroy()
 		
 	def Reset(self):
@@ -344,11 +316,28 @@ class TimeitDlg(wx.Dialog):
 		self.GetSizer().Fit(self)
 		self.SetSize(dlgsize)
 		
-def ShowTimeitDlg(parent):
-	dlg = TimeitDlg(parent, wx.NewId(), 'Timeit', python_path = 'C:\\python251\\python.exe')
+def _ShowTimeitDlg(parent, pypath):
+	dlg = TimeitDlg(parent, wx.NewId(), \
+		'Timeit wizard (step 2: Timeit)', \
+		python_path = pypath)
 	dlg.Show()
+	
+def DoTimeit(parent):
+	import util
+	from askpypathdlg import AskPythonPathDlg
+	pypathdlg = AskPythonPathDlg(parent, \
+			wx.ID_ANY, \
+			'Timeit wizard (step 1: setup python path)', \
+			cfg = util.GenCfgPath('option', 'timeitpath.cfg'))
+	retcode = pypathdlg.ShowModal()
+	if retcode != wx.ID_OK:
+		return
+	pypath = pypathdlg.GetPath()
+	pypathdlg.Destroy()
+	_ShowTimeitDlg(parent, pypath)
 	
 if __name__ == '__main__':
 	app = wx.PySimpleApp()
-	ShowTimeitDlg(None)
+#	ShowTimeitDlg(None)
+	DoTimeit(None)
 	app.MainLoop()

@@ -118,8 +118,8 @@ def createMenu(frm):
 		mb.Append(menu, '&Tools')
 		
 		def prof(evt):
-			from profdlg import ShowProfDlg
-			ShowProfDlg(frm)
+			from profdlg import DoPorf
+			DoPorf(frm)
 		ID_PROF = wx.NewId()
 		item_prof = wx.MenuItem(menu, ID_PROF, '&Profile\tCtrl+P')
 		item_prof.SetBitmap(wx.Bitmap(IP.Menu.prof))
@@ -131,8 +131,8 @@ def createMenu(frm):
 			shortHelp = 'Profile')
 		
 		def timeit(evt):
-			from timeitdlg import ShowTimeitDlg
-			ShowTimeitDlg(frm)
+			from timeitdlg import DoTimeit
+			DoTimeit(frm)
 		
 		ID_TIMEIT = wx.NewId()
 		item_timeit = wx.MenuItem(menu, ID_TIMEIT, '&Time It\tCtrl+T')
