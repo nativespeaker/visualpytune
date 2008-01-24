@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=VisualPyTune
-AppVerName=VisualPyTune 0.1.1
+AppVerName=VisualPyTune 0.1.2
 AppPublisher=YonghaoLai(lanphaday@gmail.com)
 AppPublisherURL=http://visualpytune.googlecode.com
 AppSupportURL=http://visualpytune.googlecode.com
@@ -12,7 +12,7 @@ DefaultDirName={pf}\VisualPyTune
 DefaultGroupName=VisualPyTune
 DisableProgramGroupPage=yes
 LicenseFile=dist\licence
-OutputBaseFilename=VisualPyTune.0.1.1.Win32
+OutputBaseFilename=VisualPyTune.0.1.2.Win32
 Compression=lzma
 SolidCompression=yes
 
