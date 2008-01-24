@@ -227,22 +227,27 @@ class ProfDlg(wx.Dialog):
 		proc.Redirect()
 		wx.Execute(cmd, process = proc)
 		
-def ShowProfDlg(parent, pypath):
-	dlg = ProfDlg(parent, wx.NewId(), 'Profile wizard (step 2: profiling)', python_path = pypath)
+def _ShowProfDlg(parent, pypath):
+	dlg = ProfDlg(parent, wx.NewId(), \
+		'Profile wizard (step 2: profiling)', \
+		python_path = pypath)
 	dlg.Show()
 	
 def DoPorf(parent):
+	import util
 	from askpypathdlg import AskPythonPathDlg
 	pypathdlg = AskPythonPathDlg(parent, \
 			wx.ID_ANY, \
-			'Profile wizard (step 1: setup python path)')
-	if pypathdlg.ShowModal() != wx.ID_OK:
+			'Profile wizard (step 1: setup python path)', \
+			cfg = util.GenCfgPath('option', 'prof.cfg'))
+	retcode = pypathdlg.ShowModal()
+	if retcode != wx.ID_OK:
 		return
 	pypath = pypathdlg.GetPath()
 	pypathdlg.Destroy()
-	ShowProfDlg(parent, pypath)
+	_ShowProfDlg(parent, pypath)
 	
 if __name__ == '__main__':
 	app = wx.PySimpleApp()
 	DoPorf(None)
-#	app.MainLoop()
+	app.MainLoop()
