@@ -156,17 +156,17 @@ def createMenu(frm):
 		
 		#insert help menu
 		def help(evt):
-			print 'help'
-			pass
+			import webbrowser
+			webbrowser.open_new('http://code.google.com/p/visualpytune/wiki/onlinedoc')
 		ID_HELP = wx.NewId()
-		item_help = wx.MenuItem(menu, ID_HELP, '&Help\tCtrl+H')
+		item_help = wx.MenuItem(menu, ID_HELP, 'Online &Help\tCtrl+H')
 		item_help.SetBitmap(wx.Bitmap(IP.Menu.help))
 		menu.AppendItem(item_help)
 		frm.Bind(wx.EVT_MENU, help, id = ID_HELP)
 		# add toolbar button
 		frm.toolbar.AddLabelTool(ID_HELP, '', \
 			wx.Bitmap(IP.Toolbar.help), \
-			shortHelp = 'Help')
+			shortHelp = 'Online Help')
 		
 		frm.toolbar.Realize()		
 		
