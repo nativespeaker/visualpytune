@@ -269,7 +269,8 @@ class TimeitDlg(wx.Dialog):
 #			+ p.stdout.read() )
 #		if self.resultbtn.closed:
 #			self.OnResultbtn(None)
-		tmp_file = os.getcwd() + '%d.py'%self.GetId()
+		import util
+		tmp_file = util.GenWritablePath('%d.py'%self.GetId())
 		f = open(tmp_file, 'w')
 		f.write(timeit_file_template%(stmt, setup, \
 			self.number.GetValue(), \
