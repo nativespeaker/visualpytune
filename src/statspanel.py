@@ -34,10 +34,10 @@ class Panel(panel.NotebookPanel):
 		self.statspanel = StatsPanel(self.notebook, wx.ID_ANY)
 		self.listctrl = self.statspanel.listctrl
 
-		self.chartctrl = CallGraph(self.notebook, wx.ID_ANY)
+#		self.chartctrl = CallGraph(self.notebook, wx.ID_ANY)
 		
 		self.BuildPages()
 		
 	def BuildPages(self):
 		self.notebook.AddPage(self.statspanel, 'Stats')
-		self.notebook.AddPage(self.chartctrl, 'Call Graph')
+#		self.notebook.AddPage(self.chartctrl, 'Call Graph')
