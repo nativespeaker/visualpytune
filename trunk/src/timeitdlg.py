@@ -296,7 +296,11 @@ class TimeitDlg(wx.Dialog):
 					self.OnResultbtn(None)
 				os.remove(tmp_file)
 				
-		cmd = '%s '%self.pypath + tmp_file
+		if ' ' in tmp_file:
+			tf = '"%s"'%(tmp_file, )
+		else:
+			tf = tmp_file
+		cmd = '%s '%self.pypath + tf
 		proc = TimeitProc(self)
 		proc.Redirect()
 		wx.Execute(cmd, process = proc)

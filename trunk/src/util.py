@@ -15,3 +15,4 @@ def GenWritablePath(*a):
 		return os.path.join(os.path.dirname(sys.executable), *a)
 	else:
 		return os.path.join(os.path.dirname(__file__), *a)
+		
