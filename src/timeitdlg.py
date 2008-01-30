@@ -135,6 +135,7 @@ class TimeitDlg(wx.Dialog):
 		
 		self.result = wx.TextCtrl(self, \
 			wx.ID_ANY, style = wx.TE_MULTILINE | wx.HSCROLL | wx.VSCROLL)
+		self.result.SetFont(wx.Font(10, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, 0, ''))
 		vbox.Add(self.result, \
 			proportion = 1, \
 			flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND )
@@ -292,6 +293,7 @@ class TimeitDlg(wx.Dialog):
 					+ getstr(inst.GetErrorStream()) \
 					+ '\n============ Output ============\n' \
 					+ getstr(inst.GetInputStream()))
+				self.result.ShowPosition(self.result.GetLastPosition())
 				if self.resultbtn.closed:
 					self.OnResultbtn(None)
 				os.remove(tmp_file)

@@ -123,6 +123,7 @@ class ProfDlg(wx.Dialog):
 				flag = wx.LEFT)
 			self.stdout = wx.TextCtrl(self, wx.ID_ANY, \
 					style = wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL)
+			self.stdout.SetFont(wx.Font(10, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.NORMAL, 0, ''))
 			_vbox.Add(self.stdout, \
 				border = 5, \
 				proportion = 1, \
@@ -142,6 +143,7 @@ class ProfDlg(wx.Dialog):
 			hbox.Add(self.btn_clear, \
 				flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
 			hbox.Add(self.btn_ok, \
+				border = 5, \
 				flag = wx.LEFT | wx.ALIGN_CENTRE_VERTICAL)
 			vbox.Add(hbox, \
 				border = 5, \
@@ -211,6 +213,7 @@ class ProfDlg(wx.Dialog):
 					getstr(inst.GetErrorStream()) \
 					+ getstr(inst.GetInputStream()) \
 					+ '\nProfiled .')
+				self.stdout.ShowPosition(self.stdout.GetLastPosition())
 				
 		cmd = '%s -m %s '%(self.pypath, profiler)
 #		if self.savetofile.IsChecked():
