@@ -20,6 +20,5 @@ class Panel(panel.NotebookPanel):
 		self.notebook.AddPage(self.listctrl, 'Callers')
 		
 	def update(self, title, data):
-		caky_title = 'Callers of ' + title
-		from statsmodel import make_calls_data
-		self.listctrl.reset(make_calls_data(data))
+		#caky_title = 'Callers of ' + title
+		self.listctrl.reset(data)

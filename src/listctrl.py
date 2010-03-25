@@ -146,8 +146,21 @@ class CallListCtrl(ListCtrl, ListCtrlSortMixin):
 		super(CallListCtrl, self).__init__(*a, **k)
 		ListCtrlSortMixin.__init__(self, CallListCtrl.sorters)
 		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.selected_func, self)
+		
+		self.data_list = []
 	
 	def reset(self, data):
+		tmp_data = []
+		for i in data:
+			tmp_data.append(i)
+			
+		from statsmodel import make_calls_data
+		data = make_calls_data(data)
+		
+		self.data_list = [0]*len(data)
+		for i,a in enumerate(data):
+			self.data_list[int(a[0])] = tmp_data[i]
+			
 		super(CallListCtrl, self).reset(data)
 		self.SortListItems(4, False)
 		
@@ -157,4 +170,5 @@ class CallListCtrl(ListCtrl, ListCtrlSortMixin):
 		
 	def selected_func(self, evt):
 		if self.selected_callback:
-			self.selected_callback(evt)
+			idx = int(self.GetItemText(evt.GetIndex()))
+			self.selected_callback(self.data_list[idx])
