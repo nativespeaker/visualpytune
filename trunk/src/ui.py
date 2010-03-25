@@ -259,6 +259,8 @@ def createMainUI(frm):
 		
 	frm.statspanel.listctrl.selected_callback = OnStatsSelected
 	frm.calleespanel.chartctrl.selected_callback = OnCharSelected
+	frm.calleespanel.listctrl.selected_callback = OnCharSelected
+	frm.callerspanel.listctrl.selected_callback = OnCharSelected
 	
 	def OnDirCtrlSelChanged(evt):
 		p = frm.viewpanel.dirctrl.GetFilePath()
