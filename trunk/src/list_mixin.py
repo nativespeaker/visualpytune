@@ -60,6 +60,7 @@ class ListCtrlSortMixin(object):
 		self.SortItems(self._ColSorter)
 		self.SetColumnImage(col, self.arrow_images[self.sort_flag[col]])
 		
+		
 	def OnColClick(self, evt):
 		self.ClearColumnImage(self._col)
 		self._col = col= evt.GetColumn()
@@ -68,15 +69,16 @@ class ListCtrlSortMixin(object):
 		self.SetColumnImage(col, self.arrow_images[self.sort_flag[col]])
 		
 	def _ColSorter(self, key1, key2):
-		idx1 = self.FindItemData(-1, key1)
-		idx2 = self.FindItemData(-1, key2)
-		text1 = self._GetText(idx1, self._col)
-		text2 = self._GetText(idx2, self._col)
-		
+		#idx1 = self.FindItemData(-1, key1)
+		#idx2 = self.FindItemData(-1, key2)
+		#text1 = self._GetText(idx1, self._col)
+		#text2 = self._GetText(idx2, self._col)
+		text1 = self.itemMap[key1][self._col]
+		text2 = self.itemMap[key2][self._col]
 		cmpVal = self.sorters[self._col](text1, text2)
 		
-		return cmpVal if self.sort_flag[self._col] else -cmpVal
 		
+		return cmpVal if self.sort_flag[self._col] else -cmpVal
 	def _GetText(self, idx, col):
 		return self.GetItem(idx, col).GetText()
 		

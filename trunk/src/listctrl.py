@@ -12,13 +12,19 @@ class ListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
 		wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
 		listmix.ListCtrlAutoWidthMixin.__init__(self)
 		self._createColumn()
+		self.itemMap = []
+
+		
 		
 	def _createColumn(self):
 		raise NotImplementedError, 'ListCtrl is a abstract class.'
 		
 	def reset(self, data):
+		#print 'diaoyong reset'
 		self.DeleteAllItems()
+		self.itemMap = [0]*(len(data)+1)
 		for idx, row in enumerate(data):
+			self.itemMap[int(row[0])]=row
 			self.insert_data(idx, row)
 		
 	def insert_data(self, idx, data):
@@ -35,7 +41,7 @@ def fl_cmp(l, r):
 	cmpVal = cmp(l[0], r[0])
 	if 0 == cmpVal:
 		return cmp(int(l[1]), int(r[1]))
-	return cmpVald
+	return cmpVal
 	
 def ncalls_cmp(l, r):
 	l = l.split('/')
@@ -58,6 +64,8 @@ class StatsListCtrl(ListCtrl, ListCtrlSortMixin):
 		T_PERCALL, CUMTIME, C_PERCALL)
 	sorters = (int_cmp, str_cmp, fl_cmp, ncalls_cmp, \
 		float_cmp, float_cmp, float_cmp, float_cmp)
+	
+	
 	
 	def __init__(self, *a, **k):
 		super(StatsListCtrl, self).__init__(*a, **k)
@@ -137,6 +145,7 @@ class CallListCtrl(ListCtrl, ListCtrlSortMixin):
 	def __init__(self, *a, **k):
 		super(CallListCtrl, self).__init__(*a, **k)
 		ListCtrlSortMixin.__init__(self, CallListCtrl.sorters)
+		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.selected_func, self)
 	
 	def reset(self, data):
 		super(CallListCtrl, self).reset(data)
@@ -146,3 +155,6 @@ class CallListCtrl(ListCtrl, ListCtrlSortMixin):
 		for i, col in enumerate(CallListCtrl.columns):
 			self.InsertColumn(i, col)
 		
+	def selected_func(self, evt):
+		if self.selected_callback:
+			self.selected_callback(evt)

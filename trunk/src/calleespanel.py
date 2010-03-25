@@ -25,4 +25,4 @@ class Panel(panel.NotebookPanel):
 	def update(self, caky_title, data):
 		from statsmodel import make_calls_data, make_chart_data
 		self.listctrl.reset(make_calls_data(data))
-		self.chartctrl.reset(caky_title, make_chart_data(data))
+		self.chartctrl.reset(caky_title, data)

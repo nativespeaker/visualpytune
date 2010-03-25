@@ -11,17 +11,17 @@ def make_data(stats):
 		if d[0] == 0:
 			continue
 		d = ('%d/%d'%(d[3],d[0]),	# ncalls
-			'%8.3f'%d[1], 			# tottime
-			'%8.3f'%(d[1]/d[0],), 	# t_percall
-			'%8.3f'%d[2],			# cumtime
-			'%8.3f'%(d[2]/d[0],), 	# c_percall
+			'%8.5f'%d[1], 			# tottime
+			'%8.5f'%(d[1]/d[0],), 	# t_percall
+			'%8.5f'%d[2],			# cumtime
+			'%8.5f'%(d[2]/d[0],), 	# c_percall
 			)
 		data.append((str(idx),) + fln_str_func(fln) + d)
 	return data
 	
 def make_calls_data(stats):
 	data = [ \
-		((str(i),) + fln_str_func(fln) + ('%d'%cnt, '%8.3f'%ct)) \
+		((str(i),) + fln_str_func(fln) + ('%d'%cnt, '%8.5f'%ct)) \
 		for (i, fln, cnt, ct) in stats.itervalues() ]
 	return data
 	
@@ -75,6 +75,14 @@ class StatsModel(object):
 			if v[0] == idx:
 				return func
 		return None
-		
+	
+	def get_fln_by_func(self,func):
+		f, l, n = func
+		f = f.rpartition('\\')[-1]
+		return '%s(%s:%s)'%(n, f, l)
+
+	def get_idx_by_func(self,func):
+		return self.stats_data[func][0]
+	
 	def save_stats(self, path):
 		self.stats.save(path)

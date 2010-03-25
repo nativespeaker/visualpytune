@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 import wx
-
+import profile
 import ui
 from about import name, ver
 
@@ -21,5 +21,6 @@ def main():
 	app.MainLoop()
 	
 if __name__ == '__main__':
+	#profile.run("main()", "vp1.prof")
 	main()
 	

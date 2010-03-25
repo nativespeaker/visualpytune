@@ -79,6 +79,9 @@ class Sector(object):
 
 	def __str__(self):
 		return "sector info: %s, start: %s, end: %s, rad: %s"%(self.center, self.start, self.end, str(self.rad))
+	
+	def __radd__(self, other):
+		return other + self.rad
 
 if __name__ == "__main__":
 	s = Sector(Vector(1, 0), PI, Vector(2, 2))
