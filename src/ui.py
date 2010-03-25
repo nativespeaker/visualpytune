@@ -246,12 +246,19 @@ def createMainUI(frm):
 		idx = evt.GetIndex()
 		evt_list = frm.statspanel.listctrl
 		idx = int(evt_list.GetItemText(idx))
-		fln = frm.model.get_fln_by_idx(idx)
-		caky_title = 'Callees of ' + fln
-		frm.calleespanel.update(caky_title, frm.model.get_callees(idx))
-		frm.callerspanel.update(caky_title, frm.model.get_callers(idx))
+		func = frm.model.get_func_by_idx(idx)
+		title = frm.model.get_fln_by_func(func)
+		frm.calleespanel.update(title, frm.model.stats.get_callees(func))
+		frm.callerspanel.update(title, frm.model.stats.get_callers(func))
+		
+	def OnCharSelected(func):
+		idx = frm.model.get_idx_by_func(func)
+		idx = frm.statspanel.listctrl.FindItemData(-1, idx)
+		frm.statspanel.listctrl.Focus(idx)
+		frm.statspanel.listctrl.Select(idx)
 		
 	frm.statspanel.listctrl.selected_callback = OnStatsSelected
+	frm.calleespanel.chartctrl.selected_callback = OnCharSelected
 	
 	def OnDirCtrlSelChanged(evt):
 		p = frm.viewpanel.dirctrl.GetFilePath()
