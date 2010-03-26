@@ -179,9 +179,9 @@ def createMenu(frm):
 				from about import name, ver, url, author
 				info = wx.AboutDialogInfo()
 				
-				lic = open('licence','rt')
-				info.SetLicence(''.join(lic.readlines()))
-				lic.close()
+				#lic = open('./licence','rt')
+				#info.SetLicence(''.join(lic.readlines()))
+				#lic.close()
 				
 				info.SetIcon(wx.Icon(IP.PY_ICO, wx.BITMAP_TYPE_ICO))
 				info.SetName(name)
@@ -190,7 +190,6 @@ def createMenu(frm):
 					'VisualPyTune is a python program performance tuning tool, based on wxPython.\n'
 					+ 'It can show you a callgraph(doing), stats report, callees, callers, and caky charts.\n'
 					+ 'finaly, you can remove inessential information very easy. ')
-				info.SetCopyright('(C) 2007 Yonghao Lai')
 				info.SetWebSite(url)
 
 				info.AddDeveloper(author)
