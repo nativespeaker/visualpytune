@@ -1,6 +1,17 @@
 #labels Featured,Phase-Support
 = Changs log =
-_1/25/2007_
+_26/3/2010_
+ * VisualPyTune(VPT) 0.1.3 Released! *
+ == Fixed bugs == 
+ # can't close vpt when open files in non-english directory.
+ == What's new ==
+ # Caky Chart improved:
+  # tottime replaced cumtime
+  # By click the square in Caky Chart, you can view function's callees more and more easier.
+  # add ===internal=== to Caky Chart, it shows current function's tottime.
+ # optimized sort algorithm.
+
+_1/25/2008_
  * VisualPyTune(VPT) 0.1.2 Released! *
  === Fixed bugs ===
  # Can't use timeit to multiline code blocks
