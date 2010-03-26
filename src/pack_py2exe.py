@@ -11,7 +11,9 @@ setup(windows=["vpt.py", {'script':'vpt.py','icon_resources':[(1, 'res/Py.ico')]
 	name = name, \
 	version = ver, \
 	data_files = [('option', ['option/ui.cfg']), \
-		('', ['msvcp71.dll', 'gdiplus.dll']), \
+#		('', ['msvcp71.dll', 'gdiplus.dll']), \
+		('', glob('*.dll')),
+		('', glob('*.manifest')),
 		('', ['licence']), \
 		('res', ['res/Py.ico']), \
 		('res/codectrl', glob('res/codectrl/*.png')), \

@@ -130,7 +130,8 @@ class UIConfig(Singleton):
 		
 	@modified_decorator
 	def setLastDir(self, value):
-		self.cfg.set(DIRCTRL, DIR, value)
+		import sys
+		self.cfg.set(DIRCTRL, DIR, value.encode(sys.getfilesystemencoding()))
 		
 inst = UIConfig()
 		
