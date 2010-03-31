@@ -23,6 +23,4 @@ def main():
 	app.MainLoop()
 	
 if __name__ == '__main__':
-	#profile.run("main()", "vp1.prof")
 	main()
-	

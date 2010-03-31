@@ -219,26 +219,37 @@ def createMainUI(frm):
 	from statspanel import Panel as sp
 	from callerspanel import Panel as cp
 	from calleespanel import Panel as cep
+	from historypanel import Panel as hp
 	from uicfg import UIConfig
-	
+	#-------- splitter
 	from proportionalsplitter import ProportionalSplitter
 	splitter = ProportionalSplitter(frm, wx.ID_ANY, \
-		proportion = UIConfig.inst().getLeftSplitProp(),)
+		proportion = UIConfig.inst().getLeftSplitProp())
+
+	lsplitter = ProportionalSplitter(splitter, wx.ID_ANY, \
+		proportion = UIConfig.inst().getUpSplitProp(), \
+		style = wx.BORDER_NONE)
 	
-	frm.viewpanel = vp(splitter)
 	usplitter = ProportionalSplitter(splitter, wx.ID_ANY, \
 		proportion = UIConfig.inst().getUpSplitProp(), \
 		style = wx.BORDER_NONE)
-	splitter.SplitVertically(frm.viewpanel, usplitter)
-		
-	frm.statspanel = sp(usplitter)
+	
 	rsplitter = ProportionalSplitter(usplitter, wx.ID_ANY, \
 		proportion = UIConfig.inst().getRightSplitProp(), \
 		style = wx.BORDER_NONE)
-	usplitter.SplitHorizontally(frm.statspanel, rsplitter)
-	
+	#-------- panel
+
+	frm.viewpanel = vp(lsplitter)
+	frm.historypanel = hp(lsplitter)
+	frm.statspanel = sp(usplitter)
 	frm.callerspanel = cp(rsplitter)
 	frm.calleespanel = cep(rsplitter)
+	
+	#----------- split
+	
+	splitter.SplitVertically(lsplitter, usplitter)
+	lsplitter.SplitHorizontally(frm.viewpanel, frm.historypanel)
+	usplitter.SplitHorizontally(frm.statspanel, rsplitter)
 	rsplitter.SplitVertically(frm.callerspanel, frm.calleespanel)
 	
 	def OnStatsSelected(evt):
@@ -249,19 +260,31 @@ def createMainUI(frm):
 		title = frm.model.get_fln_by_func(func)
 		frm.calleespanel.update(title, frm.model.stats.get_callees(func))
 		frm.callerspanel.update(title, frm.model.stats.get_callers(func))
+		if frm.historypanel.listctrl.isHistoryHit == False:
+			frm.historypanel.insert(func)
+		frm.historypanel.listctrl.isHistoryHit = False
 		
 	def OnCharSelected(func):
 		idx = frm.model.get_idx_by_func(func)
 		idx = frm.statspanel.listctrl.FindItemData(-1, idx)
 		frm.statspanel.listctrl.Focus(idx)
 		frm.statspanel.listctrl.Select(idx)
-		
+	
 	frm.statspanel.listctrl.selected_callback = OnStatsSelected
 	frm.calleespanel.chartctrl.selected_callback = OnCharSelected
 	frm.calleespanel.listctrl.selected_callback = OnCharSelected
 	frm.callerspanel.listctrl.selected_callback = OnCharSelected
+	frm.historypanel.listctrl.selected_callback = OnCharSelected
+	
+	frm.calleespanel.chartctrl.undo_callback = frm.historypanel.listctrl.Undo
+	frm.calleespanel.chartctrl.redo_callback = frm.historypanel.listctrl.Redo
+	
 	
 	def OnDirCtrlSelChanged(evt):
+		frm.calleespanel.chartctrl.Clear()
+		frm.calleespanel.listctrl.Clear()
+		frm.callerspanel.listctrl.Clear()
+		frm.historypanel.listctrl.Clear()
 		p = frm.viewpanel.dirctrl.GetFilePath()
 		if p and os.path.isfile(p):
 			frm.OpenFile(p)

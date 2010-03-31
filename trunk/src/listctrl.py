@@ -3,7 +3,7 @@
 import wx
 import wx.lib.mixins.listctrl as listmix
 from list_mixin import ListCtrlSortMixin, FilterMixin, int_cmp, str_cmp, float_cmp
-
+import os
 import re
 
 class ListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
@@ -164,6 +164,9 @@ class CallListCtrl(ListCtrl, ListCtrlSortMixin):
 		super(CallListCtrl, self).reset(data)
 		self.SortListItems(4, False)
 		
+	def Clear(self):
+		self.reset({})
+		
 	def _createColumn(self):
 		for i, col in enumerate(CallListCtrl.columns):
 			self.InsertColumn(i, col)
@@ -171,4 +174,78 @@ class CallListCtrl(ListCtrl, ListCtrlSortMixin):
 	def selected_func(self, evt):
 		if self.selected_callback:
 			idx = int(self.GetItemText(evt.GetIndex()))
+			self.selected_callback(self.data_list[idx])
+
+			
+class HistoryListCtrl(wx.ListCtrl):
+	ID = 'ID'
+	FUNC_NAME = 'func_name'
+	FL = 'file:line'
+	columns = (ID, FUNC_NAME, FL)
+	widths = (50,150,150)
+
+	def __init__(self, *a, **k):
+		super(HistoryListCtrl, self).__init__(*a, **k)
+		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.selected_func, self)
+		self.data_list = []
+		self.length = 0
+		self.isHistoryHit = False
+		self.iterator = 0
+		self.focus_id = 0
+		self._createColumn()
+	
+	def insert_data(self, idx, data):
+		self.InsertStringItem(0, str(idx))
+		self.SetStringItem(0, 1, str(data[0]))
+		self.SetStringItem(0, 2, str(data[1]))
+		
+	def my_focus(self, itemid):
+		self.focus_id = itemid
+		self.Focus(self.focus_id)
+		self.Select(self.focus_id)
+		
+	def insert(self, data):
+		while self.iterator + 1 < self.length:
+			self.pop()
+		self.data_list.append(data)
+		data = (data[2], os.path.basename(data[0]) + ':' + str(data[1]))
+		self.insert_data(self.length, data)
+		self.my_focus(0)
+		self.length += 1
+		self.iterator = self.length
+		
+	def Clear(self):
+		while self.length > 0:
+			self.pop()
+		self.iterator = 0
+		self.focus_id = 0
+		
+	def pop(self):
+		self.data_list.pop()
+		self.length -= 1
+		self.DeleteItem(0)
+		
+	def _createColumn(self):
+		for i, col in enumerate(HistoryListCtrl.columns):
+			self.InsertColumn
+			self.InsertColumn(i, col, width = HistoryListCtrl.widths[i])
+			
+	def Redo(self):
+		if self.iterator >= self.length-1:
+			return
+		self.iterator += 1
+		self.my_focus(self.focus_id - 1)
+	
+	def Undo(self):
+		if self.iterator <= 0:
+			return
+		self.iterator -= 1
+		self.my_focus(self.focus_id + 1)
+		
+	def selected_func(self, evt):
+		if self.selected_callback:
+			self.isHistoryHit = True
+			self.focus_id = int(evt.GetIndex())
+			idx = int(self.GetItemText(evt.GetIndex()))
+			self.iterator = idx
 			self.selected_callback(self.data_list[idx])

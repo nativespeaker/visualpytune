@@ -68,6 +68,10 @@ class CakyChart(wx.Panel):
 		self.label_pos = []
 		self.func_name = []
 		
+		self.selected_callback = None
+		self.undo_callback = None
+		self.redo_callback = None
+		
 	def update_param(self):
 		'''
 		if width >= height:
@@ -104,8 +108,10 @@ class CakyChart(wx.Panel):
 			|-----------------------|
 		'''
 		w, h = self.GetClientSizeTuple()
-		
-		self.title_rect = (0, 0, w, TITLE_HEIGHT)
+		mid = w/4*3
+		self.back_rect = (mid, 0, TITLE_HEIGHT*2, TITLE_HEIGHT)
+		self.forward_rect = (mid + TITLE_HEIGHT*2, 0, TITLE_HEIGHT*2, TITLE_HEIGHT)
+		self.title_rect = (0, 0, mid, TITLE_HEIGHT)
 		
 		if w >= h:
 			width, height = w // 2, h - TITLE_HEIGHT
@@ -119,6 +125,14 @@ class CakyChart(wx.Panel):
 	def LeftUp(self, evt):
 		x, y = evt.GetPosition()
 		rt = self.label_rect
+		if x>self.back_rect[0] and x<self.back_rect[0]+self.back_rect[2] and \
+		   y>self.back_rect[1] and y<self.back_rect[1]+self.back_rect[3]:
+			self.undo_callback()
+
+		if x>self.forward_rect[0] and x<self.forward_rect[0]+self.forward_rect[2] and \
+		   y>self.forward_rect[1] and y<self.forward_rect[1]+self.forward_rect[3]:
+			self.redo_callback()
+			
 		if x<rt[0] or x>rt[0]+rt[2] or y<rt[1] or y>rt[1]+rt[3]:
 			return
 		for i in xrange(len(self.label_pos)):
@@ -172,6 +186,9 @@ class CakyChart(wx.Panel):
 		self.Update()
 		self.Refresh(True)
 		
+	def Clear(self):
+		self.reset('',{})
+		
 	def make_sectors(self, angles):
 		l, t, w, h = self.caky_rect
 		half_w, half_h = w // 2, h // 2
@@ -223,6 +240,14 @@ class CakyChart(wx.Panel):
 		w = self.GetClientSizeTuple()[0]
 		dc.DrawLabel(self.get_valid_text(self.title_text, dc, w), \
 			wx.Rect(*self.title_rect), wx.ALIGN_CENTRE)
+		#dc.SetBrush(wx.BLUE_BRUSH)
+		#print self.title_rect
+		#dc.SetBrush(wx.BLUE_BRUSH)
+		#dc.DrawRectangle(*self.back_rect)
+		#dc.SetBrush(wx.GREEN_BRUSH)
+		#dc.DrawRectangle(*self.forward_rect)
+		dc.DrawLabel('<<<',wx.Rect(*self.back_rect), wx.ALIGN_CENTRE)
+		dc.DrawLabel('>>>',wx.Rect(*self.forward_rect), wx.ALIGN_CENTRE)
 		
 	@attr_defend( \
 		(wx.PaintDC.GetPen, wx.PaintDC.GetBrush), \
