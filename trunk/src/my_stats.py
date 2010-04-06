@@ -31,7 +31,26 @@ class Stats(object):
                         self.stats = hotshot.stats.load(*a)
 
                 self.stats.calc_callees()
-                
+
+#------------for call graph-------------
+                self.init_data()
+
+        def init_data(self):
+                self.id_dict = {}
+                self.id_list = []
+                self.call_map = []
+                stats = self.stats.stats
+                for i, (func, (cc, nc, tt, ct, cs)) in enumerate(stats.iteritems()):
+                        self.id_list.append( (func,cc,nc,tt,ct,cs) )
+                        self.id_dict[func] = i
+
+                for i in xrange(len(self.id_list)):
+                        self.call_map.append([])
+                for i, (func,cc,nc,tt,ct,cs) in enumerate(self.id_list):
+                        for j in cs.iterkeys():
+                                self.call_map[self.id_dict[j]].append(i)
+#------------for call graph-------------
+
         @check_stats
         def save(self, path):
                 of = open(path, 'w+')

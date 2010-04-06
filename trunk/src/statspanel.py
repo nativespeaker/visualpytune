@@ -3,8 +3,9 @@
 import wx
 
 from listctrl import FilterStatsListCtrl as DataList
-from callgraph import CallGraph
 from filterpanel import FilterPanel
+#from statisticspanel import StatisticsPanel
+from callgraph import CallGraph
 import panel
 	
 class StatsPanel(wx.Panel):
@@ -33,11 +34,12 @@ class Panel(panel.NotebookPanel):
 		
 		self.statspanel = StatsPanel(self.notebook, wx.ID_ANY)
 		self.listctrl = self.statspanel.listctrl
-
-#		self.chartctrl = CallGraph(self.notebook, wx.ID_ANY)
+		#self.statisticspanel = StatisticsPanel(self.notebook, wx.ID_ANY)
+		self.callpanel = CallGraph(self.notebook, wx.ID_ANY)
 		
 		self.BuildPages()
 		
 	def BuildPages(self):
 		self.notebook.AddPage(self.statspanel, 'Stats')
-#		self.notebook.AddPage(self.chartctrl, 'Call Graph')
+		#self.notebook.AddPage(self.statisticspanel, 'Statistics')
+		self.notebook.AddPage(self.callpanel, 'Call Graph')

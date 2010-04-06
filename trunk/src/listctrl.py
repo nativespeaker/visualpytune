@@ -157,8 +157,9 @@ class CallListCtrl(ListCtrl, ListCtrlSortMixin):
 		from statsmodel import make_calls_data
 		data = make_calls_data(data)
 		
-		self.data_list = [0]*len(data)
+		self.data_list = [0]*(len(data)+1)
 		for i,a in enumerate(data):
+			print i, int(a[0])
 			self.data_list[int(a[0])] = tmp_data[i]
 			
 		super(CallListCtrl, self).reset(data)
