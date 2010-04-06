@@ -342,7 +342,10 @@ def AddMiscFunc(frm):
 			from traceback import print_exc
 			print_exc(file = sys.stdout)
 			return
+		#print frm.model.get_data()
+		frm.statspanel.callpanel.init_data(frm.model.stats)
 		frm.statspanel.listctrl.reset(frm.model.get_data())
+
 	frm.OpenFile = OpenFile
 	
 	def SaveStats(path):
