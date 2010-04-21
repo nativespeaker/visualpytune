@@ -176,13 +176,17 @@ class CakyChart(wx.Panel):
 		
 		data_sum = sum(data)
 		if data_sum == 0:
-			data_sum = 0.001
-		
-		self.angles = [PI2 * (i / data_sum) for i in data]
-		for i, (name, d) in enumerate(zip(self.names, data)):
-			if name == self.title_text:
-				name = '===internal==='
-			self.names[i] = '%.2f%% %s'%( d / data_sum * 100, name)
+			self.angles = [0 for i in data]
+			for i, (name, d) in enumerate(zip(self.names, data)):
+				if name == self.title_text:
+					name = '===internal==='
+				self.names[i] = '%.2f%% %s'%( 0, name)
+		else:
+			self.angles = [PI2 * (i / data_sum) for i in data]
+			for i, (name, d) in enumerate(zip(self.names, data)):
+				if name == self.title_text:
+					name = '===internal==='
+				self.names[i] = '%.2f%% %s'%( d / data_sum * 100, name)
 		self.make_sectors(self.angles)
 		
 		self.Update()
