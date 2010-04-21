@@ -175,6 +175,8 @@ class CakyChart(wx.Panel):
 		data = [i[1] for i in data]
 		
 		data_sum = sum(data)
+		if data_sum == 0:
+			data_sum = 0.001
 		
 		self.angles = [PI2 * (i / data_sum) for i in data]
 		for i, (name, d) in enumerate(zip(self.names, data)):

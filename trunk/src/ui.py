@@ -110,7 +110,7 @@ def createMenu(frm):
 		menu.AppendItem(item_quit)
 		frm.Bind(wx.EVT_MENU, quit, id = ID_QUIT)
 		
-		mb.Append(menu, '&File')
+		mb.Append(menu, 'File')
 		
 	def createToolsMenu(mb):
 		menu = wx.Menu()
@@ -266,19 +266,25 @@ def createMainUI(frm):
 		
 	def OnCharSelected(func):
 		idx = frm.model.get_idx_by_func(func)
-		idx = frm.statspanel.listctrl.FindItemData(-1, idx)
+		tidx = idx
+		idx = frm.statspanel.listctrl.FindItem(0, str(idx))
+		if idx == -1 :
+			frm.statspanel.ClearFilter()
+			idx = frm.statspanel.listctrl.FindItem(0, str(tidx))
 		frm.statspanel.listctrl.Focus(idx)
 		frm.statspanel.listctrl.Select(idx)
 	
 	frm.statspanel.listctrl.selected_callback = OnStatsSelected
 	frm.calleespanel.chartctrl.selected_callback = OnCharSelected
+	frm.callerspanel.chartctrl.selected_callback = OnCharSelected
 	frm.calleespanel.listctrl.selected_callback = OnCharSelected
 	frm.callerspanel.listctrl.selected_callback = OnCharSelected
 	frm.historypanel.listctrl.selected_callback = OnCharSelected
 	
 	frm.calleespanel.chartctrl.undo_callback = frm.historypanel.listctrl.Undo
 	frm.calleespanel.chartctrl.redo_callback = frm.historypanel.listctrl.Redo
-	
+	frm.callerspanel.chartctrl.undo_callback = frm.historypanel.listctrl.Undo
+	frm.callerspanel.chartctrl.redo_callback = frm.historypanel.listctrl.Redo	
 	
 	def OnDirCtrlSelChanged(evt):
 		frm.calleespanel.chartctrl.Clear()
@@ -345,6 +351,7 @@ def AddMiscFunc(frm):
 		#print frm.model.get_data()
 		frm.statspanel.callpanel.init_data(frm.model.stats)
 		frm.statspanel.listctrl.reset(frm.model.get_data())
+		frm.statspanel.SetCpuTime(frm.model.stats.nc, frm.model.stats.pnc, frm.model.stats.cpu_time)
 
 	frm.OpenFile = OpenFile
 	

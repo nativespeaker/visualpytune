@@ -43,3 +43,9 @@ class Panel(panel.NotebookPanel):
 		self.notebook.AddPage(self.statspanel, 'Stats')
 		#self.notebook.AddPage(self.statisticspanel, 'Statistics')
 		self.notebook.AddPage(self.callpanel, 'Call Graph')
+		
+	def SetCpuTime(self, fn, pfn, ctime):
+		self.statspanel.filterpanel.SetCPU(fn, pfn, ctime);
+		
+	def ClearFilter(self):
+		self.statspanel.filterpanel.Clear()
