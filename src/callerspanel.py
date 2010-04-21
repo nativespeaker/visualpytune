@@ -13,12 +13,15 @@ class Panel(panel.NotebookPanel):
 		
 		self.listctrl = DataList(self.notebook, wx.ID_ANY, \
 			style = wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.BORDER_NONE)
+		self.chartctrl = CakyChart(self.notebook, wx.ID_ANY)
 		
 		self.BuildPages()
 		
 	def BuildPages(self):
 		self.notebook.AddPage(self.listctrl, 'Callers')
+		self.notebook.AddPage(self.chartctrl, 'Caky Chart')
 		
-	def update(self, title, data):
+	def update(self, caky_title, data):
 		#caky_title = 'Callers of ' + title
 		self.listctrl.reset(data)
+		self.chartctrl.reset(caky_title, data)

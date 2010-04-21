@@ -13,6 +13,7 @@ class ListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
 		listmix.ListCtrlAutoWidthMixin.__init__(self)
 		self._createColumn()
 		self.itemMap = []
+		self.ref_dict = {}
 
 		
 		
@@ -20,16 +21,18 @@ class ListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
 		raise NotImplementedError, 'ListCtrl is a abstract class.'
 		
 	def reset(self, data):
-		#print 'diaoyong reset'
 		self.DeleteAllItems()
-		self.itemMap = [0]*(len(data)+1)
+		self.itemMap = []
+		self.ref_dict = {}
+		data.sort(cmp = lambda x, y: cmp(int(x[0]), int(y[0])))
 		for idx, row in enumerate(data):
-			self.itemMap[int(row[0])]=row
+			self.ref_dict[int(row[0])] = idx
+			self.itemMap.append(row)
 			self.insert_data(idx, row)
 		
 	def insert_data(self, idx, data):
 		self.InsertStringItem(idx, str(data[0]))
-		self.SetItemData(idx, int(data[0]))	# for sort
+		self.SetItemData(idx, idx)	# for sort
 		for col, txt in enumerate(data):
 			if col == 0:
 				continue
@@ -99,9 +102,6 @@ class FilterStatsListCtrl(StatsListCtrl, FilterMixin):
 		StatsListCtrl.reset(self, data)
 	
 	def OnFilter(self, func_rest, file_rest):
-		if not func_rest and not file_rest:
-			return
-			
 		if func_rest:
 			data = self.generic_filter(func_rest, self.data, 1, None)
 		else:
@@ -111,17 +111,15 @@ class FilterStatsListCtrl(StatsListCtrl, FilterMixin):
 			def getfilename(s):
 				return s.partition(':')[0]
 			data = self.generic_filter(file_rest, data, 2, getfilename)
-#		if not data:
-#			pass
-		if data != self.data:
-			self.reset(data, False)
+
+		self.reset(data, False)
 				
 	def OnAll(self):
 		self.reset(self.data, False)
 		
 	def generic_filter(self, rest, data, col, getdata = None):
 		try:
-			p = re.compile(rest)
+			p = re.compile(rest, re.I)
 		except:
 			from traceback import print_exc
 			import sys
@@ -159,7 +157,6 @@ class CallListCtrl(ListCtrl, ListCtrlSortMixin):
 		
 		self.data_list = [0]*(len(data)+1)
 		for i,a in enumerate(data):
-			print i, int(a[0])
 			self.data_list[int(a[0])] = tmp_data[i]
 			
 		super(CallListCtrl, self).reset(data)

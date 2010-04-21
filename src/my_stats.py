@@ -39,11 +39,17 @@ class Stats(object):
                 self.id_dict = {}
                 self.id_list = []
                 self.call_map = []
+                self.cpu_time = 0.0
+                self.nc = 0
+                self.pnc = 0
                 stats = self.stats.stats
                 for i, (func, (cc, nc, tt, ct, cs)) in enumerate(stats.iteritems()):
+                        if cs.has_key(('profile', 0, 'profiler')) == True:
+                                self.cpu_time += ct
+                        self.nc += nc
+                        self.pnc += cc
                         self.id_list.append( (func,cc,nc,tt,ct,cs) )
                         self.id_dict[func] = i
-
                 for i in xrange(len(self.id_list)):
                         self.call_map.append([])
                 for i, (func,cc,nc,tt,ct,cs) in enumerate(self.id_list):
@@ -69,6 +75,8 @@ class Stats(object):
                 for f in callers:
                         (cc, nc, tt, ct, cs) = stats[f]
                         ret.append((f, callers[f], ct))
+                #cc, nc, tt, ct, cs = stats[func]
+                #ret.append((func,nc,tt))
                 return self.__make_record(ret)
 
         @check_stats
@@ -79,8 +87,7 @@ class Stats(object):
                 ret = []
                 for i in callees:
                         cc, nc, tt, ct, cs = stats[i]
-                        ret.append((i, callees[i], ct/float(nc)*callees[i]))
-                        tot+=ct/float(nc)*callees[i]
+                        ret.append((i, callees[i], ct*callees[i]/float(cc)))
                 cc, nc, tt, ct, cs = stats[func]
                 ret.append((func,nc,tt))
                 return self.__make_record(ret)
