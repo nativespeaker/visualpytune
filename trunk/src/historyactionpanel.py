@@ -10,22 +10,22 @@ class HistoryActionPanel(wx.Panel):
                 ID_UNDO = wx.NewId()
                 self.UndoButton = wx.Button(self, ID_UNDO, '<< back')
                 box.Add(self.UndoButton, \
-                        border = 10, \
-                        flag = wx.TOP | wx.LEFT | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+                        border = 5, \
+                        flag = wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
                 self.Bind(wx.EVT_BUTTON, self.OnUndo, id = ID_UNDO)
 
                 ID_REDO = wx.NewId()
                 self.RedoButton = wx.Button(self, ID_REDO, 'forward >>')
                 box.Add(self.RedoButton, \
-                        border = 10, \
-                        flag = wx.TOP | wx.LEFT | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+                        border = 5, \
+                        flag = wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
                 self.Bind(wx.EVT_BUTTON, self.OnRedo, id = ID_REDO)
 
                 ID_CLEAR = wx.NewId()
                 self.ClearButton = wx.Button(self, ID_CLEAR, '&Clear')
                 box.Add(self.ClearButton, \
-                        border = 10, \
-                        flag = wx.TOP | wx.LEFT | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
+                        border = 5, \
+                        flag = wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
                 self.Bind(wx.EVT_BUTTON, self.OnClear, id = ID_CLEAR)
 
                 self.SetSizer(box)

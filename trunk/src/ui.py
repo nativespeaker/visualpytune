@@ -273,21 +273,39 @@ def createMainUI(frm):
 			idx = frm.statspanel.listctrl.FindItem(0, str(tidx))
 		frm.statspanel.listctrl.Focus(idx)
 		frm.statspanel.listctrl.Select(idx)
+
+	def OnLoadedStatsSelected(stats):
+		frm.calleespanel.chartctrl.Clear()
+		frm.callerspanel.chartctrl.Clear()
+		frm.calleespanel.listctrl.Clear()
+		frm.callerspanel.listctrl.Clear()
+		frm.historypanel.listctrl.Clear()
+		frm.model = stats
+		frm.statspanel.callpanel.init_data(frm.model.stats)
+		frm.statspanel.listctrl.reset(frm.model.get_data())
+		frm.statspanel.SetCpuTime(frm.model.stats.nc, frm.model.stats.pnc, frm.model.stats.cpu_time)
 	
 	frm.statspanel.listctrl.selected_callback = OnStatsSelected
-	frm.calleespanel.chartctrl.selected_callback = OnCharSelected
-	frm.callerspanel.chartctrl.selected_callback = OnCharSelected
+	frm.calleespanel.chartctrl.cc.selected_callback = OnCharSelected
+	frm.callerspanel.chartctrl.cc.selected_callback = OnCharSelected
 	frm.calleespanel.listctrl.selected_callback = OnCharSelected
 	frm.callerspanel.listctrl.selected_callback = OnCharSelected
 	frm.historypanel.listctrl.selected_callback = OnCharSelected
+	frm.viewpanel.statsctrl.selected_callback = OnLoadedStatsSelected
 	
-	frm.calleespanel.chartctrl.undo_callback = frm.historypanel.listctrl.Undo
-	frm.calleespanel.chartctrl.redo_callback = frm.historypanel.listctrl.Redo
-	frm.callerspanel.chartctrl.undo_callback = frm.historypanel.listctrl.Undo
-	frm.callerspanel.chartctrl.redo_callback = frm.historypanel.listctrl.Redo	
+	#frm.calleespanel.chartctrl.cc.undo_callback = frm.historypanel.listctrl.Undo
+	#frm.callerspanel.chartctrl.cc.undo_callback = frm.historypanel.listctrl.Undo
+	frm.calleespanel.chartctrl.actionpanel.undo_callback = frm.historypanel.listctrl.Undo
+	frm.callerspanel.chartctrl.actionpanel.undo_callback = frm.historypanel.listctrl.Undo
+
+	#frm.calleespanel.chartctrl.cc.redo_callback = frm.historypanel.listctrl.Redo
+	#frm.callerspanel.chartctrl.cc.redo_callback = frm.historypanel.listctrl.Redo
+	frm.calleespanel.chartctrl.actionpanel.redo_callback = frm.historypanel.listctrl.Redo
+	frm.callerspanel.chartctrl.actionpanel.redo_callback = frm.historypanel.listctrl.Redo
 	
 	def OnDirCtrlSelChanged(evt):
 		frm.calleespanel.chartctrl.Clear()
+		frm.callerspanel.chartctrl.Clear()
 		frm.calleespanel.listctrl.Clear()
 		frm.callerspanel.listctrl.Clear()
 		frm.historypanel.listctrl.Clear()
@@ -300,7 +318,7 @@ def createMainUI(frm):
 	wx.EVT_TREE_SEL_CHANGED(frm.viewpanel.dirctrl, \
 		frm.viewpanel.dirctrl.GetTreeCtrl().GetId(), \
 		OnDirCtrlSelChanged)
-		
+	
 	def OnSize(evt):
 		size = evt.GetSize()
 		UIConfig.inst().setWindowSize((size.x, size.y))
@@ -347,8 +365,10 @@ def AddMiscFunc(frm):
 			import sys
 			from traceback import print_exc
 			print_exc(file = sys.stdout)
+			wx.MessageBox('Analysis failure.', 'Failed', wx.OK|wx.ICON_INFORMATION, frm)
 			return
 		#print frm.model.get_data()
+		frm.viewpanel.statsctrl.insert((os.path.split(path)[1], os.path.split(path)[0]), frm.model)
 		frm.statspanel.callpanel.init_data(frm.model.stats)
 		frm.statspanel.listctrl.reset(frm.model.get_data())
 		frm.statspanel.SetCpuTime(frm.model.stats.nc, frm.model.stats.pnc, frm.model.stats.cpu_time)

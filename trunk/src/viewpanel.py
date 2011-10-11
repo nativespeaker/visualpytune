@@ -2,6 +2,7 @@
 
 import wx
 
+from listctrl import LoadedListCtrl
 from uicfg import UIConfig
 
 def Notebook(parent, *a, **k):
@@ -11,14 +12,20 @@ def Notebook(parent, *a, **k):
 						wx.ID_ANY, \
 						dir=UIConfig.inst().getLastDir(), \
 						style = wx.BORDER_NONE)
+						
+	parent.statsctrl = LoadedListCtrl(obj, wx.ID_ANY, \
+			style = wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.NO_BORDER)
+
 	obj.AddPage(parent.dirctrl, 'Files')
+	obj.AddPage(parent.statsctrl, 'loaded pf')
+	
 	
 	def OnDirctrlContextMenu(evt):
 		def OnRefresh(evt):
 			path = parent.dirctrl.GetPath()
 			parent.dirctrl.ReCreateTree()
 			parent.dirctrl.SetPath(path)
-			
+
 		menu = wx.Menu()
 		menu.AppendSeparator()
 		ID_REFRESH = wx.NewId()

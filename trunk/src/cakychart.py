@@ -33,7 +33,7 @@ ROUND_OFFSET = 10
 
 TITLE_FONT_SIZE = 14
 
-TITLE_HEIGHT = 34
+TITLE_HEIGHT = 0
 
 ROW_SPACING = 5
 
@@ -71,7 +71,7 @@ class CakyChart(wx.Panel):
 		self.selected_callback = None
 		self.undo_callback = None
 		self.redo_callback = None
-		
+
 	def update_param(self):
 		'''
 		if width >= height:
@@ -227,7 +227,7 @@ class CakyChart(wx.Panel):
 	def draw(self, dc):
 		self.make_sectors(self.angles)
 		self.draw_bg(dc)
-		self.draw_title(dc)
+		#self.draw_title(dc)
 		self.draw_caky(dc)
 		self.draw_label(dc)
 		
