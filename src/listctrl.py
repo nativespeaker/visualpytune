@@ -225,7 +225,6 @@ class HistoryListCtrl(wx.ListCtrl):
 		
 	def _createColumn(self):
 		for i, col in enumerate(HistoryListCtrl.columns):
-			self.InsertColumn
 			self.InsertColumn(i, col, width = HistoryListCtrl.widths[i])
 			
 	def Redo(self):
@@ -247,3 +246,46 @@ class HistoryListCtrl(wx.ListCtrl):
 			idx = int(self.GetItemText(evt.GetIndex()))
 			self.iterator = idx
 			self.selected_callback(self.data_list[idx])
+
+class LoadedListCtrl(wx.ListCtrl):
+	ID = 'ID'
+	FILE_NAME = 'file_name'
+	PATH = 'path'
+	columns = (ID, FILE_NAME, PATH)
+	widths = (50,100,200)
+
+	def __init__(self, *a, **k):
+		super(LoadedListCtrl, self).__init__(*a, **k)
+		self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.selected_func, self)
+		self.stats_list = []
+		self.data_list = []
+		self.file_dict = {}
+		self.lenght = 0
+		self.iterator = 0
+		self.focus_id = 0
+		self._createColumn()
+
+	def insert(self, data, stats):
+		print data
+		if self.file_dict.has_key(data):
+			self.stats_list[self.file_dict[data]] = stats
+		else:
+			self.file_dict[data] = self.lenght
+			self.data_list.append(data)
+			self.stats_list.append(stats)
+			self.lenght += 1
+			self.insert_data(self.lenght, data)
+
+	def insert_data(self, idx, data):
+		self.InsertStringItem(idx-1, str(idx))
+		self.SetStringItem(idx-1, 1, str(data[0]))
+		self.SetStringItem(idx-1, 2, str(data[1]))
+		
+	def selected_func(self, evt):
+		self.focus_id = int(evt.GetIndex())
+		idx = int(self.GetItemText(evt.GetIndex()))
+		self.selected_callback(self.stats_list[idx-1])
+
+	def _createColumn(self):
+		for i, col in enumerate(LoadedListCtrl.columns):
+			self.InsertColumn(i, col, width = LoadedListCtrl.widths[i])

@@ -3,7 +3,7 @@
 import wx
 
 from listctrl import CallListCtrl as DataList
-from cakychart import CakyChart
+from cakychartpanel import CakyChartPanel
 	
 import panel
 	
@@ -13,7 +13,7 @@ class Panel(panel.NotebookPanel):
 		
 		self.listctrl = DataList(self.notebook, wx.ID_ANY, \
 			style = wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.BORDER_NONE)
-		self.chartctrl = CakyChart(self.notebook, wx.ID_ANY)
+		self.chartctrl = CakyChartPanel(self.notebook, wx.ID_ANY)
 		
 		self.BuildPages()
 		
