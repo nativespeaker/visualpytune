@@ -6,7 +6,7 @@ import sys, os
 #from pytune import __version__
 
 setup(name='pytune',
-		version=':versiontools:pytune:',
+		version=':versiontools:pytune',
 #	version = __version__,
       description="A tool for Python program performence tuning.",
       long_description="""\
