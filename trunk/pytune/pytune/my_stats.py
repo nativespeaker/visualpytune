@@ -74,7 +74,11 @@ class Stats(object):
                 ret = []
                 for f in callers:
                         (cc, nc, tt, ct, cs) = stats[f]
-                        ret.append((f, callers[f], ct))
+                        if isinstance(callers[f], tuple):
+                            callers_time = callers[f][0]
+                        else:
+                            callers_time = callers[f]
+                        ret.append((f, callers_time, ct))
                 #cc, nc, tt, ct, cs = stats[func]
                 #ret.append((func,nc,tt))
                 return self.__make_record(ret)
@@ -87,7 +91,11 @@ class Stats(object):
                 ret = []
                 for i in callees:
                         cc, nc, tt, ct, cs = stats[i]
-                        ret.append((i, callees[i], ct*callees[i]/float(cc)))
+                        if isinstance(callees[i], tuple):
+                            callees_time = callees[i][0]
+                        else:
+                            callees_time = callees[i]
+                        ret.append((i, callees_time, ct*callees_time/float(cc)))
                 cc, nc, tt, ct, cs = stats[func]
                 ret.append((func,nc,tt))
                 return self.__make_record(ret)
